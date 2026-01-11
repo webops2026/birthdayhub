@@ -152,7 +152,7 @@ export default function HomePage() {
   const isJa = locale === 'ja';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50/30 via-pink-50/30 to-purple-50/30">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-pink-50 to-purple-50">
       {/* Hero Section - Integrated */}
       <section className="pt-16 pb-12 px-6">
         <div className="max-w-7xl mx-auto">
