@@ -236,9 +236,9 @@ export default function HomePage() {
   // 誕生日に基づくデータ計算
   const ageData = calculateAge(year, month, day);
   const educationData = calculateEducation(year, month, day);
-  const todayBirthstone = BIRTHSTONES[currentMonth];
-  const todayFlower = SAMPLE_FLOWERS[currentMonth];
-  const todayColor = SAMPLE_COLORS[currentMonth];
+  const todayBirthstone = BIRTHSTONES[month];
+  const todayFlower = SAMPLE_FLOWERS[month];
+  const todayColor = SAMPLE_COLORS[month];
   const zodiacSign = getZodiacSign(month, day);
   const zodiac = ZODIAC_SIGNS[zodiacSign];
   const chineseZodiac = CHINESE_ZODIAC[(year - 4) % 12];
@@ -579,7 +579,7 @@ export default function HomePage() {
                 <div className="flex items-start justify-between mb-8">
                   <div>
                     <p className="text-sm font-medium text-stone-500 tracking-widest uppercase mb-3">
-                      Birthstone · {currentMonth}月
+                      Birthstone · {month}月
                     </p>
                     <h2 className="text-6xl font-bold text-stone-900 mb-3 tracking-tight">
                       {todayBirthstone.name_ja}
