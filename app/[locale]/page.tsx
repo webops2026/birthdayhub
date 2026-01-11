@@ -266,7 +266,7 @@ export default function HomePage() {
       '大正': { start: 1912, end: 1926 }, // 1912年〜1926年（15年間）
       '明治': { start: 1868, end: 1912 }, // 1868年〜1912年（45年間）
     };
-    return eraRanges[era].end - eraRanges[era].start;
+    return eraRanges[era].end - eraRanges[era].start + 1;
   };
 
   const isJa = locale === 'ja';
