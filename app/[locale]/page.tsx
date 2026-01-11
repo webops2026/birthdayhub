@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 interface Birthstone {
@@ -209,7 +209,6 @@ const WORLD_BIRTHDAY_TRADITIONS = [
 export default function HomePage() {
   const t = useTranslations('home');
   const tCommon = useTranslations('common');
-  const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
 
@@ -236,16 +235,14 @@ export default function HomePage() {
   const zodiac = ZODIAC_SIGNS[zodiacSign];
   const chineseZodiac = CHINESE_ZODIAC[(year - 4) % 12];
   const japaneseEra = getJapaneseEra(currentYear);
+  
+  // 選択された誕生日の和暦を計算
+  const selectedDateWareki = seirekiToWareki(year);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
   }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push(`/${locale}/birthday/${year}/${month}/${day}`);
-  };
 
   // 和暦→西暦変換
   const warekiToSeireki = (era: string, eraYear: number): number => {
@@ -350,16 +347,16 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <div className="inline-flex items-baseline gap-4 mb-6">
               <time className="text-7xl font-bold tracking-tighter text-stone-900">
-                {currentYear}.{currentMonth.toString().padStart(2, '0')}.{currentDay.toString().padStart(2, '0')}
+                {year}.{month.toString().padStart(2, '0')}.{day.toString().padStart(2, '0')}
               </time>
             </div>
             <p className="text-lg text-stone-500 font-light tracking-wide">
-              {japaneseEra.era}{japaneseEra.eraYear}年 · {zodiac.name_ja}
+              {selectedDateWareki.era}{selectedDateWareki.eraYear}年 · {zodiac.name_ja}
             </p>
           </div>
 
           {/* Birthday Input Form */}
-          <form onSubmit={handleSubmit} className="max-w-2xl mx-auto mb-16">
+          <div className="max-w-2xl mx-auto mb-16">
             {/* 日本語ページの場合、西暦/和暦切替ボタン */}
             {isJa && (
               <div className="flex justify-center gap-2 mb-4">
@@ -467,14 +464,8 @@ export default function HomePage() {
                   </select>
                 </>
               )}
-              <button
-                type="submit"
-                className="px-8 py-3 bg-stone-900 text-white font-medium text-sm rounded-xl hover:bg-stone-800 transition-colors"
-              >
-                {isJa ? '検索' : 'Search'}
-              </button>
             </div>
-          </form>
+          </div>
         </div>
       </section>
 
