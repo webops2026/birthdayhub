@@ -59,8 +59,8 @@ export default async function LocaleLayout({
                 <div className="flex items-center justify-between">
                   {/* Logo */}
                   <a href={`/${locale}`} className="flex items-center gap-3 group">
-                    <div className="w-10 h-10 rounded-xl bg-stone-900 flex items-center justify-center">
-                      <span className="text-white text-lg">🎂</span>
+                    <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center group-hover:bg-stone-200 transition-colors">
+                      <span className="text-2xl">🎂</span>
                     </div>
                     <span className="text-xl font-bold text-stone-900 tracking-tight">
                       BirthdayHub
@@ -87,7 +87,7 @@ export default async function LocaleLayout({
                         href="/ja"
                         className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                           locale === 'ja'
-                            ? 'bg-stone-900 text-white'
+                            ? 'bg-stone-200 text-stone-900'
                             : 'text-stone-500 hover:text-stone-900 hover:bg-stone-50'
                         }`}
                       >
@@ -97,7 +97,7 @@ export default async function LocaleLayout({
                         href="/en"
                         className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                           locale === 'en'
-                            ? 'bg-stone-900 text-white'
+                            ? 'bg-stone-200 text-stone-900'
                             : 'text-stone-500 hover:text-stone-900 hover:bg-stone-50'
                         }`}
                       >
@@ -113,18 +113,18 @@ export default async function LocaleLayout({
             <main className="flex-1">{children}</main>
 
             {/* Footer */}
-            <footer className="bg-stone-900 text-stone-200 mt-20 py-16">
+            <footer className="bg-stone-50 text-stone-900 mt-20 py-16 border-t border-stone-200">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="grid md:grid-cols-4 gap-12 mb-12">
                   {/* Brand */}
                   <div className="md:col-span-2">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center">
                         <span className="text-lg">🎂</span>
                       </div>
-                      <span className="text-lg font-bold text-white tracking-tight">BirthdayHub</span>
+                      <span className="text-lg font-bold text-stone-900 tracking-tight">BirthdayHub</span>
                     </div>
-                    <p className="text-stone-400 text-sm max-w-md leading-relaxed">
+                    <p className="text-stone-600 text-sm max-w-md leading-relaxed">
                       {locale === 'ja' 
                         ? 'あなたの誕生日の、すべてがここに。'
                         : 'Everything about your birthday, all in one place.'
@@ -134,7 +134,7 @@ export default async function LocaleLayout({
 
                   {/* Quick Links */}
                   <div>
-                    <h4 className="text-sm font-semibold text-white mb-4 tracking-wide">
+                    <h4 className="text-sm font-semibold text-stone-900 mb-4 tracking-wide">
                       {locale === 'ja' ? 'メニュー' : 'Menu'}
                     </h4>
                     <div className="space-y-3">
@@ -142,7 +142,7 @@ export default async function LocaleLayout({
                         <a
                           key={item.href}
                           href={item.href}
-                          className="block text-sm text-stone-400 hover:text-white transition-colors"
+                          className="block text-sm text-stone-600 hover:text-stone-900 transition-colors"
                         >
                           {item.label}
                         </a>
@@ -152,14 +152,14 @@ export default async function LocaleLayout({
 
                   {/* Language */}
                   <div>
-                    <h4 className="text-sm font-semibold text-white mb-4 tracking-wide">
+                    <h4 className="text-sm font-semibold text-stone-900 mb-4 tracking-wide">
                       {locale === 'ja' ? '言語' : 'Language'}
                     </h4>
                     <div className="space-y-3">
-                      <a href="/ja" className="block text-sm text-stone-400 hover:text-white transition-colors">
+                      <a href="/ja" className="block text-sm text-stone-600 hover:text-stone-900 transition-colors">
                         日本語
                       </a>
-                      <a href="/en" className="block text-sm text-stone-400 hover:text-white transition-colors">
+                      <a href="/en" className="block text-sm text-stone-600 hover:text-stone-900 transition-colors">
                         English
                       </a>
                     </div>
@@ -167,7 +167,7 @@ export default async function LocaleLayout({
                 </div>
 
                 {/* Bottom bar */}
-                <div className="pt-8 border-t border-stone-800 text-center">
+                <div className="pt-8 border-t border-stone-200 text-center">
                   <p className="text-sm text-stone-500">
                     © {new Date().getFullYear()} BirthdayHub. All rights reserved.
                   </p>
