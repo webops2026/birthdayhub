@@ -135,6 +135,7 @@ export default function HomePage() {
   const [year, setYear] = useState(currentYear - 30);
   const [month, setMonth] = useState(currentMonth);
   const [day, setDay] = useState(currentDay);
+  const [isLoading, setIsLoading] = useState(true);
 
   const todayBirthstone = BIRTHSTONES[currentMonth];
   const todayFlower = SAMPLE_FLOWERS[currentMonth];
@@ -144,12 +145,49 @@ export default function HomePage() {
   const chineseZodiac = CHINESE_ZODIAC[(currentYear - 4) % 12];
   const japaneseEra = getJapaneseEra(currentYear);
 
+  useEffect(() => {
+    // Simulate initial loading
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     router.push(`/${locale}/birthday/${year}/${month}/${day}`);
   };
 
   const isJa = locale === 'ja';
+
+  // Skeleton Loader Component
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-pink-50 to-purple-50">
+        <section className="pt-16 pb-12 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-sm mb-6 animate-pulse">
+                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                <div className="w-32 h-6 bg-gray-200 rounded"></div>
+              </div>
+              <div className="w-64 h-12 bg-gray-200 rounded-lg mx-auto mb-4 animate-pulse"></div>
+              <div className="w-96 h-12 bg-gray-200 rounded-xl mx-auto animate-pulse"></div>
+            </div>
+          </div>
+        </section>
+        <section className="pb-16 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-4">
+              {[...Array(9)].map((_, i) => (
+                <div key={i} className={`bg-white/80 rounded-3xl p-6 animate-pulse ${i === 0 ? 'md:col-span-6 lg:col-span-5' : i === 8 ? 'md:col-span-6 lg:col-span-6' : 'md:col-span-3 lg:col-span-4'}`}>
+                  <div className="h-20 bg-gray-200 rounded"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-pink-50 to-purple-50">
@@ -220,32 +258,44 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-4">
             
             {/* 誕生石 - LARGE (Featured) */}
-            <div className="md:col-span-6 lg:col-span-5 bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all group">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-3xl">💎</span>
-                <h2 className="text-xl font-bold text-gray-900">誕生石</h2>
-              </div>
-              <div className="flex items-center gap-6 mb-6">
-                <div 
-                  className="w-24 h-24 rounded-2xl shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform"
-                  style={{ backgroundColor: todayBirthstone.color }}
-                />
-                <div>
-                  <p className="text-4xl font-bold text-gray-900 mb-1">{todayBirthstone.name_ja}</p>
-                  <p className="text-lg text-gray-500">{todayBirthstone.name_en}</p>
+            <div 
+              className="md:col-span-6 lg:col-span-5 bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden"
+              style={{
+                background: `linear-gradient(135deg, ${todayBirthstone.color}08 0%, transparent 100%), rgba(255, 255, 255, 0.8)`
+              }}
+            >
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-6">
+                  <span className="text-3xl group-hover:scale-110 transition-transform">💎</span>
+                  <h2 className="text-xl font-bold text-gray-900">誕生石</h2>
+                </div>
+                <div className="flex items-center gap-6 mb-6">
+                  <div 
+                    className="w-24 h-24 rounded-2xl shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
+                    style={{ backgroundColor: todayBirthstone.color }}
+                  />
+                  <div>
+                    <p className="text-4xl font-bold text-gray-900 mb-1">{todayBirthstone.name_ja}</p>
+                    <p className="text-lg text-gray-500">{todayBirthstone.name_en}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {todayBirthstone.meaning_ja.map((m, i) => (
+                    <span key={i} className="px-4 py-2 bg-gradient-to-r from-pink-50 to-purple-50 text-gray-700 rounded-full text-sm font-medium">
+                      {m}
+                    </span>
+                  ))}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {todayBirthstone.meaning_ja.map((m, i) => (
-                  <span key={i} className="px-4 py-2 bg-gradient-to-r from-pink-50 to-purple-50 text-gray-700 rounded-full text-sm font-medium">
-                    {m}
-                  </span>
-                ))}
-              </div>
+              {/* Decorative element */}
+              <div 
+                className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full opacity-10 blur-3xl"
+                style={{ backgroundColor: todayBirthstone.color }}
+              />
             </div>
 
             {/* 星座 */}
-            <div className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">⭐</span>
                 <h2 className="text-lg font-bold text-gray-900">星座</h2>
@@ -256,7 +306,7 @@ export default function HomePage() {
             </div>
 
             {/* 和暦 */}
-            <div className="md:col-span-3 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div className="md:col-span-3 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">📅</span>
                 <h2 className="text-lg font-bold text-gray-900">和暦</h2>
@@ -268,39 +318,53 @@ export default function HomePage() {
             </div>
 
             {/* 誕生花 */}
-            <div className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">🌸</span>
-                <h2 className="text-lg font-bold text-gray-900">誕生花</h2>
-              </div>
-              <p className="text-2xl font-bold text-gray-900 mb-1">{todayFlower.name_ja}</p>
-              <p className="text-sm text-gray-500 mb-3">{todayFlower.name_en}</p>
-              <div className="inline-block px-3 py-1.5 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">
-                {todayFlower.meaning}
+            <div 
+              className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
+              style={{
+                background: `linear-gradient(135deg, #FFC0CB08 0%, transparent 100%), rgba(255, 255, 255, 0.8)`
+              }}
+            >
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">🌸</span>
+                  <h2 className="text-lg font-bold text-gray-900">誕生花</h2>
+                </div>
+                <p className="text-2xl font-bold text-gray-900 mb-1">{todayFlower.name_ja}</p>
+                <p className="text-sm text-gray-500 mb-3">{todayFlower.name_en}</p>
+                <div className="inline-block px-3 py-1.5 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">
+                  {todayFlower.meaning}
+                </div>
               </div>
             </div>
 
             {/* 誕生色 */}
-            <div className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">🎨</span>
-                <h2 className="text-lg font-bold text-gray-900">誕生色</h2>
-              </div>
-              <div className="flex items-center gap-4 mb-3">
-                <div 
-                  className="w-16 h-16 rounded-xl shadow-md flex-shrink-0"
-                  style={{ backgroundColor: todayColor.hex }}
-                />
-                <div>
-                  <p className="text-xl font-bold text-gray-900">{todayColor.name_ja}</p>
-                  <p className="text-xs text-gray-500 font-mono">{todayColor.hex}</p>
+            <div 
+              className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
+              style={{
+                background: `linear-gradient(135deg, ${todayColor.hex}08 0%, transparent 100%), rgba(255, 255, 255, 0.8)`
+              }}
+            >
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">🎨</span>
+                  <h2 className="text-lg font-bold text-gray-900">誕生色</h2>
                 </div>
+                <div className="flex items-center gap-4 mb-3">
+                  <div 
+                    className="w-16 h-16 rounded-xl shadow-md flex-shrink-0"
+                    style={{ backgroundColor: todayColor.hex }}
+                  />
+                  <div>
+                    <p className="text-xl font-bold text-gray-900">{todayColor.name_ja}</p>
+                    <p className="text-xs text-gray-500 font-mono">{todayColor.hex}</p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600">{todayColor.personality}</p>
               </div>
-              <p className="text-sm text-gray-600">{todayColor.personality}</p>
             </div>
 
             {/* 干支 */}
-            <div className="md:col-span-2 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div className="md:col-span-2 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🐉</span>
                 <h2 className="text-lg font-bold text-gray-900">干支</h2>
@@ -310,7 +374,7 @@ export default function HomePage() {
             </div>
 
             {/* 六曜 */}
-            <div className="md:col-span-2 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div className="md:col-span-2 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🌙</span>
                 <h2 className="text-lg font-bold text-gray-900">六曜</h2>
@@ -320,7 +384,7 @@ export default function HomePage() {
             </div>
 
             {/* 二十四節気 */}
-            <div className="md:col-span-2 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div className="md:col-span-2 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🌾</span>
                 <h2 className="text-lg font-bold text-gray-900">二十四節気</h2>
@@ -330,7 +394,7 @@ export default function HomePage() {
             </div>
 
             {/* 厄年 - WIDE */}
-            <div className="md:col-span-6 lg:col-span-6 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div className="md:col-span-6 lg:col-span-6 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🙏</span>
                 <h2 className="text-lg font-bold text-gray-900">厄年</h2>
@@ -358,7 +422,7 @@ export default function HomePage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <a
               href={`/${locale}/birthstones`}
-              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
             >
               <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">💎</span>
               <h3 className="font-bold text-gray-900">{t('exploreBirthstones')}</h3>
@@ -366,7 +430,7 @@ export default function HomePage() {
 
             <a
               href={`/${locale}/birthflowers`}
-              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
             >
               <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">🌸</span>
               <h3 className="font-bold text-gray-900">{t('exploreBirthflowers')}</h3>
@@ -374,7 +438,7 @@ export default function HomePage() {
 
             <a
               href={`/${locale}/birthcolors`}
-              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
             >
               <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">🎨</span>
               <h3 className="font-bold text-gray-900">{t('exploreBirthcolors')}</h3>
@@ -382,7 +446,7 @@ export default function HomePage() {
 
             <a
               href={`/${locale}/age-calculator`}
-              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
             >
               <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">📅</span>
               <h3 className="font-bold text-gray-900">和暦変換</h3>
