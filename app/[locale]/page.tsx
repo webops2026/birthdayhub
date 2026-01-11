@@ -190,7 +190,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [useWareki, setUseWareki] = useState(false); // 和暦モード切替
   const [selectedEra, setSelectedEra] = useState('令和'); // 選択された元号
-  const [eraYear, setEraYear] = useState(6); // 和暦の年
+  const [eraYear, setEraYear] = useState(currentYear - 2018); // 和暦の年（現在の令和年）
 
   // 誕生日に基づくデータ計算
   const ageData = calculateAge(year, month, day);
@@ -243,7 +243,9 @@ export default function HomePage() {
   // 元号変更時に西暦を更新
   const handleEraChange = (newEra: string) => {
     setSelectedEra(newEra);
-    const newYear = warekiToSeireki(newEra, eraYear);
+    // 新しい元号の1年目にリセット
+    setEraYear(1);
+    const newYear = warekiToSeireki(newEra, 1);
     setYear(newYear);
   };
 
@@ -253,6 +255,18 @@ export default function HomePage() {
     const wareki = seirekiToWareki(newYear);
     setSelectedEra(wareki.era);
     setEraYear(wareki.eraYear);
+  };
+
+  // 各元号の最大年数を取得
+  const getMaxEraYear = (era: string): number => {
+    const eraRanges: { [key: string]: { start: number; end: number } } = {
+      '令和': { start: 2019, end: currentYear }, // 2019年〜現在
+      '平成': { start: 1989, end: 2019 }, // 1989年〜2019年（31年間）
+      '昭和': { start: 1926, end: 1989 }, // 1926年〜1989年（64年間）
+      '大正': { start: 1912, end: 1926 }, // 1912年〜1926年（15年間）
+      '明治': { start: 1868, end: 1912 }, // 1868年〜1912年（45年間）
+    };
+    return eraRanges[era].end - eraRanges[era].start;
   };
 
   const isJa = locale === 'ja';
@@ -344,7 +358,7 @@ export default function HomePage() {
                     onChange={(e) => handleEraYearChange(Number(e.target.value))}
                     className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
                   >
-                    {Array.from({ length: 65 }, (_, i) => i + 1).map((y) => (
+                    {Array.from({ length: getMaxEraYear(selectedEra) }, (_, i) => i + 1).map((y) => (
                       <option key={y} value={y}>{y}年</option>
                     ))}
                   </select>
