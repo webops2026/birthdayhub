@@ -48,10 +48,10 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen flex flex-col bg-white">
-            <header className="border-b border-gray-200 sticky top-0 z-50 bg-white">
-              <nav className="max-w-5xl mx-auto px-6 py-4">
+            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm">
+              <nav className="max-w-6xl mx-auto px-6 py-4">
                 <div className="flex items-center justify-between">
-                  <a href={`/${locale}`} className="text-lg font-bold text-gray-900">
+                  <a href={`/${locale}`} className="text-xl font-bold text-slate-900 hover:text-blue-600 transition-colors">
                     BirthdayHub
                   </a>
                   <div className="flex items-center gap-8">
@@ -60,30 +60,30 @@ export default async function LocaleLayout({
                         <a
                           key={item.href}
                           href={item.href}
-                          className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                          className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors relative group"
                         >
                           {item.label}
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300" />
                         </a>
                       ))}
                     </div>
                     <div className="flex gap-2 text-sm">
                       <a
                         href="/ja"
-                        className={`px-3 py-1 transition-colors ${
+                        className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
                           locale === 'ja'
-                            ? 'text-gray-900 font-medium'
-                            : 'text-gray-500 hover:text-gray-900'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
                         日本語
                       </a>
-                      <span className="text-gray-300">|</span>
                       <a
                         href="/en"
-                        className={`px-3 py-1 transition-colors ${
+                        className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
                           locale === 'en'
-                            ? 'text-gray-900 font-medium'
-                            : 'text-gray-500 hover:text-gray-900'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
                         EN
@@ -94,23 +94,23 @@ export default async function LocaleLayout({
               </nav>
             </header>
             <main className="flex-grow">{children}</main>
-            <footer className="border-t border-gray-200 mt-20">
-              <div className="max-w-5xl mx-auto px-6 py-12">
+            <footer className="bg-slate-900 text-white mt-20 py-16">
+              <div className="max-w-6xl mx-auto px-6">
                 <div className="grid md:grid-cols-3 gap-12 mb-12">
                   <div>
-                    <p className="font-bold text-gray-900 mb-4">BirthdayHub</p>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-lg font-bold mb-4">BirthdayHub</p>
+                    <p className="text-sm text-slate-400 leading-relaxed">
                       {locale === 'ja' ? '誕生石・誕生花・誕生色で、あなたの特別な日を彩りましょう。' : 'Discover the meaning and magic behind your special day.'}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900 mb-4">{locale === 'ja' ? 'メニュー' : 'Menu'}</p>
+                    <p className="text-sm font-semibold mb-4">{locale === 'ja' ? 'メニュー' : 'Menu'}</p>
                     <div className="space-y-2">
                       {navItems.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
-                          className="block text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                          className="block text-sm text-slate-400 hover:text-white transition-colors"
                         >
                           {item.label}
                         </a>
@@ -118,19 +118,19 @@ export default async function LocaleLayout({
                     </div>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900 mb-4">{locale === 'ja' ? '言語' : 'Language'}</p>
+                    <p className="text-sm font-semibold mb-4">{locale === 'ja' ? '言語' : 'Language'}</p>
                     <div className="space-y-2">
-                      <a href="/ja" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                      <a href="/ja" className="block text-sm text-slate-400 hover:text-white transition-colors">
                         日本語
                       </a>
-                      <a href="/en" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                      <a href="/en" className="block text-sm text-slate-400 hover:text-white transition-colors">
                         English
                       </a>
                     </div>
                   </div>
                 </div>
-                <div className="border-t border-gray-200 pt-8">
-                  <p className="text-xs text-gray-500 text-center">
+                <div className="border-t border-slate-800 pt-8">
+                  <p className="text-xs text-slate-500 text-center">
                     © {new Date().getFullYear()} BirthdayHub. All rights reserved.
                   </p>
                 </div>

@@ -51,7 +51,7 @@ function getWareki(year: number): string {
 
 // 厄年判定
 function getYakudoshi(birthYear: number, currentYear: number, gender: 'male' | 'female'): string | null {
-  const age = currentYear - birthYear + 1; // 数え年
+  const age = currentYear - birthYear + 1;
   
   if (gender === 'male') {
     if (age === 25) return '本厄（25歳）';
@@ -70,7 +70,7 @@ function getYakudoshi(birthYear: number, currentYear: number, gender: 'male' | '
   return null;
 }
 
-// 六曜データ（簡易版）
+// 六曜データ
 const ROKUYOU = ['大安', '赤口', '先勝', '友引', '先負', '仏滅'];
 
 // 二十四節気
@@ -125,29 +125,29 @@ export default function HomePage() {
   const isJa = locale === 'ja';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
       {/* Hero Section */}
-      <section className="border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+      <section className="relative pt-20 pb-16 px-6">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-sm text-gray-500 mb-3">
+            <p className="text-sm text-slate-500 mb-3 font-medium">
               {isJa ? `${currentYear}年${currentMonth}月${currentDay}日` : `${currentMonth}/${currentDay}/${currentYear}`}
             </p>
-            <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
               {isJa ? '今日の誕生日情報' : "Today's Birthday Info"}
             </h1>
-            <p className="text-gray-600 text-lg">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               {isJa ? 'あなたの誕生日に関する全ての情報' : 'Everything about your birthday'}
             </p>
           </div>
 
           {/* Search Form */}
-          <div className="max-w-md mx-auto">
-            <form onSubmit={handleSubmit} className="flex gap-3">
+          <div className="max-w-md mx-auto mb-16">
+            <form onSubmit={handleSubmit} className="flex gap-2">
               <select
                 value={year}
                 onChange={(e) => setYear(Number(e.target.value))}
-                className="px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-gray-900"
+                className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all shadow-sm"
               >
                 {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
                   <option key={y} value={y}>{y}</option>
@@ -156,7 +156,7 @@ export default function HomePage() {
               <select
                 value={month}
                 onChange={(e) => setMonth(Number(e.target.value))}
-                className="px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-gray-900"
+                className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all shadow-sm"
               >
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
                   <option key={m} value={m}>{m}</option>
@@ -165,7 +165,7 @@ export default function HomePage() {
               <select
                 value={day}
                 onChange={(e) => setDay(Number(e.target.value))}
-                className="px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-gray-900"
+                className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all shadow-sm"
               >
                 {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
                   <option key={d} value={d}>{d}</option>
@@ -173,7 +173,7 @@ export default function HomePage() {
               </select>
               <button
                 type="submit"
-                className="px-6 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition-colors whitespace-nowrap"
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-blue-600 transition-all shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 whitespace-nowrap"
               >
                 {isJa ? '検索' : 'Search'}
               </button>
@@ -182,108 +182,145 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Today's Info Grid */}
-      <section className="border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-6 py-12">
-          <div className="grid md:grid-cols-4 gap-6">
+      {/* Today's Info Cards */}
+      <section className="px-6 pb-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-4 mb-12">
             {/* 誕生石 */}
-            <div className="border-l-2 border-gray-900 pl-4">
-              <p className="text-xs text-gray-500 mb-2">{isJa ? '誕生石' : 'Birthstone'}</p>
-              <p className="font-bold text-gray-900 mb-1">{isJa ? todayBirthstone.name_ja : todayBirthstone.name_en}</p>
-              <p className="text-sm text-gray-600">{(isJa ? todayBirthstone.meaning_ja : todayBirthstone.meaning_en).join('・')}</p>
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-100">
+              <div className="flex items-center gap-3 mb-3">
+                <div 
+                  className="w-10 h-10 rounded-xl shadow-inner"
+                  style={{ backgroundColor: todayBirthstone.color }}
+                />
+                <div>
+                  <p className="text-xs text-slate-500 font-medium">{isJa ? '誕生石' : 'Birthstone'}</p>
+                  <p className="font-bold text-slate-900">{isJa ? todayBirthstone.name_ja : todayBirthstone.name_en}</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-600">{(isJa ? todayBirthstone.meaning_ja : todayBirthstone.meaning_en).join('・')}</p>
             </div>
 
             {/* 誕生花 */}
-            <div className="border-l-2 border-gray-900 pl-4">
-              <p className="text-xs text-gray-500 mb-2">{isJa ? '誕生花' : 'Birth Flower'}</p>
-              <p className="font-bold text-gray-900 mb-1">{isJa ? todayFlower.name_ja : todayFlower.name_en}</p>
-              <p className="text-sm text-gray-600">{isJa ? todayFlower.meaning_ja : todayFlower.meaning_en}</p>
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-100">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center shadow-inner">
+                  <span className="text-xl">🌸</span>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 font-medium">{isJa ? '誕生花' : 'Birth Flower'}</p>
+                  <p className="font-bold text-slate-900">{isJa ? todayFlower.name_ja : todayFlower.name_en}</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-600">{isJa ? todayFlower.meaning_ja : todayFlower.meaning_en}</p>
             </div>
 
             {/* 誕生色 */}
-            <div className="border-l-2 border-gray-900 pl-4">
-              <p className="text-xs text-gray-500 mb-2">{isJa ? '誕生色' : 'Birth Color'}</p>
-              <p className="font-bold text-gray-900 mb-1">{isJa ? todayColor.name_ja : todayColor.name_en}</p>
-              <p className="text-sm text-gray-600">{todayColor.hex}</p>
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-100">
+              <div className="flex items-center gap-3 mb-3">
+                <div 
+                  className="w-10 h-10 rounded-xl shadow-inner"
+                  style={{ backgroundColor: todayColor.hex }}
+                />
+                <div>
+                  <p className="text-xs text-slate-500 font-medium">{isJa ? '誕生色' : 'Birth Color'}</p>
+                  <p className="font-bold text-slate-900">{isJa ? todayColor.name_ja : todayColor.name_en}</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-600">{todayColor.hex}</p>
             </div>
 
             {/* 星座 */}
-            <div className="border-l-2 border-gray-900 pl-4">
-              <p className="text-xs text-gray-500 mb-2">{isJa ? '星座' : 'Zodiac'}</p>
-              <p className="font-bold text-gray-900 mb-1">{isJa ? zodiac.ja : zodiac.en}</p>
-              <p className="text-sm text-gray-600">Western</p>
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-100">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center shadow-inner">
+                  <span className="text-xl">⭐</span>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 font-medium">{isJa ? '星座' : 'Zodiac'}</p>
+                  <p className="font-bold text-slate-900">{isJa ? zodiac.ja : zodiac.en}</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-600">Western</p>
             </div>
           </div>
+
+          {/* Japanese Cultural Info */}
+          {isJa && (
+            <div className="bg-gradient-to-br from-amber-50/80 to-orange-50/80 rounded-2xl p-8 border border-amber-100/50 shadow-sm mb-12">
+              <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                <span>🇯🇵</span>
+                日本の暦・文化
+              </h2>
+              
+              <div className="grid md:grid-cols-4 gap-4">
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">和暦</p>
+                  <p className="text-sm font-semibold text-slate-900">{wareki}</p>
+                </div>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">厄年</p>
+                  <p className="text-sm font-semibold text-slate-900">{yakudoshi || '該当なし'}</p>
+                </div>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">六曜</p>
+                  <p className="text-sm font-semibold text-slate-900">{rokuyou}</p>
+                </div>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">二十四節気</p>
+                  <p className="text-sm font-semibold text-slate-900">{nijushisekki}</p>
+                </div>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">干支</p>
+                  <p className="text-sm font-semibold text-slate-900">{eto}</p>
+                </div>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">旧暦</p>
+                  <p className="text-sm font-semibold text-slate-900">12月13日</p>
+                </div>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">数え年</p>
+                  <p className="text-sm font-semibold text-slate-900">{currentYear - 1990 + 1}歳</p>
+                </div>
+                
+                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">次の節句</p>
+                  <p className="text-sm font-semibold text-slate-900">人日の節句</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Japanese Cultural Info */}
-      {isJa && (
-        <section className="border-b border-gray-200">
-          <div className="max-w-5xl mx-auto px-6 py-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-8">日本の暦・文化</h2>
-            
-            <div className="grid md:grid-cols-4 gap-6">
-              <div>
-                <p className="text-xs text-gray-500 mb-1">和暦</p>
-                <p className="text-sm text-gray-900">{wareki}</p>
-              </div>
-              
-              <div>
-                <p className="text-xs text-gray-500 mb-1">厄年</p>
-                <p className="text-sm text-gray-900">{yakudoshi || '該当なし'}</p>
-              </div>
-              
-              <div>
-                <p className="text-xs text-gray-500 mb-1">六曜</p>
-                <p className="text-sm text-gray-900">{rokuyou}</p>
-              </div>
-              
-              <div>
-                <p className="text-xs text-gray-500 mb-1">二十四節気</p>
-                <p className="text-sm text-gray-900">{nijushisekki}</p>
-              </div>
-              
-              <div>
-                <p className="text-xs text-gray-500 mb-1">干支</p>
-                <p className="text-sm text-gray-900">{eto}</p>
-              </div>
-              
-              <div>
-                <p className="text-xs text-gray-500 mb-1">旧暦</p>
-                <p className="text-sm text-gray-900">12月13日</p>
-              </div>
-              
-              <div>
-                <p className="text-xs text-gray-500 mb-1">数え年</p>
-                <p className="text-sm text-gray-900">{currentYear - 1990 + 1}歳</p>
-              </div>
-              
-              <div>
-                <p className="text-xs text-gray-500 mb-1">次の節句</p>
-                <p className="text-sm text-gray-900">人日の節句</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Monthly Birthstones */}
-      <section className="border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-6 py-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-8">
+      <section className="px-6 pb-16">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-slate-900 mb-8">
             {isJa ? '12ヶ月の誕生石' : 'Birthstones by Month'}
           </h2>
           
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {Object.values(BIRTHSTONES).map((stone) => (
               <a
                 key={stone.id}
                 href={`/${locale}/birthstones/${stone.month}`}
-                className="block border border-gray-200 p-4 hover:border-gray-900 transition-colors"
+                className="group bg-white rounded-xl p-4 hover:shadow-md transition-all border border-slate-100 hover:border-blue-200"
               >
-                <p className="text-xs text-gray-500 mb-2">{stone.month}{isJa ? '月' : ''}</p>
-                <p className="text-sm font-medium text-gray-900">{isJa ? stone.name_ja : stone.name_en}</p>
+                <div
+                  className="w-12 h-12 rounded-xl mb-3 mx-auto shadow-sm"
+                  style={{ backgroundColor: stone.color }}
+                />
+                <p className="text-xs text-slate-500 text-center mb-1">{stone.month}{isJa ? '月' : ''}</p>
+                <p className="text-sm font-semibold text-slate-900 text-center group-hover:text-blue-600 transition-colors">
+                  {isJa ? stone.name_ja : stone.name_en}
+                </p>
               </a>
             ))}
           </div>
@@ -291,35 +328,44 @@ export default function HomePage() {
       </section>
 
       {/* Categories */}
-      <section>
-        <div className="max-w-5xl mx-auto px-6 py-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-8">
+      <section className="px-6 pb-20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-slate-900 mb-8">
             {isJa ? 'カテゴリー' : 'Categories'}
           </h2>
           
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-6">
             <a
               href={`/${locale}/birthstones`}
-              className="block border border-gray-200 p-6 hover:border-gray-900 transition-colors"
+              className="group bg-white rounded-2xl p-8 hover:shadow-lg transition-all border border-slate-100 hover:border-blue-200"
             >
-              <h3 className="font-bold text-gray-900 mb-2">{t('exploreBirthstones')}</h3>
-              <p className="text-sm text-gray-600">{t('exploreBirthstonesDesc')}</p>
+              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">💎</div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                {t('exploreBirthstones')}
+              </h3>
+              <p className="text-sm text-slate-600">{t('exploreBirthstonesDesc')}</p>
             </a>
 
             <a
               href={`/${locale}/birthflowers`}
-              className="block border border-gray-200 p-6 hover:border-gray-900 transition-colors"
+              className="group bg-white rounded-2xl p-8 hover:shadow-lg transition-all border border-slate-100 hover:border-pink-200"
             >
-              <h3 className="font-bold text-gray-900 mb-2">{t('exploreBirthflowers')}</h3>
-              <p className="text-sm text-gray-600">{t('exploreBirthflowersDesc')}</p>
+              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🌸</div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-pink-600 transition-colors">
+                {t('exploreBirthflowers')}
+              </h3>
+              <p className="text-sm text-slate-600">{t('exploreBirthflowersDesc')}</p>
             </a>
 
             <a
               href={`/${locale}/birthcolors`}
-              className="block border border-gray-200 p-6 hover:border-gray-900 transition-colors"
+              className="group bg-white rounded-2xl p-8 hover:shadow-lg transition-all border border-slate-100 hover:border-purple-200"
             >
-              <h3 className="font-bold text-gray-900 mb-2">{t('exploreBirthcolors')}</h3>
-              <p className="text-sm text-gray-600">{t('exploreBirthcolorsDesc')}</p>
+              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🎨</div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-purple-600 transition-colors">
+                {t('exploreBirthcolors')}
+              </h3>
+              <p className="text-sm text-slate-600">{t('exploreBirthcolorsDesc')}</p>
             </a>
           </div>
         </div>
