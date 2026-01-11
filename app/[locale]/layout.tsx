@@ -45,58 +45,45 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-sans antialiased bg-white text-gray-900">
+      <body>
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen flex flex-col">
-            {/* Header */}
-            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
-              <nav className="max-w-6xl mx-auto px-6 py-4">
+          <div className="min-h-screen flex flex-col bg-white">
+            <header className="border-b border-gray-200 sticky top-0 z-50 bg-white">
+              <nav className="max-w-5xl mx-auto px-6 py-4">
                 <div className="flex items-center justify-between">
-                  {/* Logo */}
-                  <a href={`/${locale}`} className="flex items-center gap-2 group">
-                    <span className="text-2xl">🎂</span>
-                    <span className="text-xl font-bold text-gray-900">
-                      BirthdayHub
-                    </span>
+                  <a href={`/${locale}`} className="text-lg font-bold text-gray-900">
+                    BirthdayHub
                   </a>
-
-                  {/* Navigation */}
-                  <div className="flex items-center gap-6">
-                    <div className="hidden md:flex items-center gap-1">
+                  <div className="flex items-center gap-8">
+                    <div className="hidden md:flex gap-6">
                       {navItems.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
-                          className="px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 text-sm font-medium transition-all"
+                          className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
                         >
                           {item.label}
                         </a>
                       ))}
                     </div>
-
-                    {/* Language Switcher */}
-                    <div className="flex items-center border-l border-gray-200 pl-6">
+                    <div className="flex gap-2 text-sm">
                       <a
                         href="/ja"
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                        className={`px-3 py-1 transition-colors ${
                           locale === 'ja'
-                            ? 'bg-rose-50 text-rose-600'
-                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                            ? 'text-gray-900 font-medium'
+                            : 'text-gray-500 hover:text-gray-900'
                         }`}
                       >
                         日本語
                       </a>
+                      <span className="text-gray-300">|</span>
                       <a
                         href="/en"
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                        className={`px-3 py-1 transition-colors ${
                           locale === 'en'
-                            ? 'bg-rose-50 text-rose-600'
-                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                            ? 'text-gray-900 font-medium'
+                            : 'text-gray-500 hover:text-gray-900'
                         }`}
                       >
                         EN
@@ -106,65 +93,44 @@ export default async function LocaleLayout({
                 </div>
               </nav>
             </header>
-
-            {/* Main Content */}
-            <main className="flex-1">{children}</main>
-
-            {/* Footer */}
-            <footer className="bg-gray-50 border-t border-gray-100">
-              <div className="max-w-6xl mx-auto px-6 py-12">
-                <div className="grid md:grid-cols-4 gap-8 mb-8">
-                  {/* Brand */}
-                  <div className="md:col-span-2">
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="text-2xl">🎂</span>
-                      <span className="text-lg font-bold text-gray-900">BirthdayHub</span>
-                    </div>
-                    <p className="text-gray-500 text-sm max-w-md">
-                      {locale === 'ja' 
-                        ? '誕生石・誕生花・誕生色で、あなたの特別な日を彩りましょう。'
-                        : 'Color your special day with birthstones, flowers, and colors.'
-                      }
+            <main className="flex-grow">{children}</main>
+            <footer className="border-t border-gray-200 mt-20">
+              <div className="max-w-5xl mx-auto px-6 py-12">
+                <div className="grid md:grid-cols-3 gap-12 mb-12">
+                  <div>
+                    <p className="font-bold text-gray-900 mb-4">BirthdayHub</p>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {locale === 'ja' ? '誕生石・誕生花・誕生色で、あなたの特別な日を彩りましょう。' : 'Discover the meaning and magic behind your special day.'}
                     </p>
                   </div>
-
-                  {/* Quick Links */}
                   <div>
-                    <h4 className="text-sm font-semibold text-gray-900 mb-4">
-                      {locale === 'ja' ? 'メニュー' : 'Menu'}
-                    </h4>
+                    <p className="text-sm font-medium text-gray-900 mb-4">{locale === 'ja' ? 'メニュー' : 'Menu'}</p>
                     <div className="space-y-2">
                       {navItems.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
-                          className="block text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                          className="block text-sm text-gray-600 hover:text-gray-900 transition-colors"
                         >
                           {item.label}
                         </a>
                       ))}
                     </div>
                   </div>
-
-                  {/* Language */}
                   <div>
-                    <h4 className="text-sm font-semibold text-gray-900 mb-4">
-                      {locale === 'ja' ? '言語' : 'Language'}
-                    </h4>
+                    <p className="text-sm font-medium text-gray-900 mb-4">{locale === 'ja' ? '言語' : 'Language'}</p>
                     <div className="space-y-2">
-                      <a href="/ja" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        🇯🇵 日本語
+                      <a href="/ja" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                        日本語
                       </a>
-                      <a href="/en" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        🇬🇧 English
+                      <a href="/en" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                        English
                       </a>
                     </div>
                   </div>
                 </div>
-
-                {/* Bottom bar */}
-                <div className="pt-8 border-t border-gray-200 text-center">
-                  <p className="text-sm text-gray-400">
+                <div className="border-t border-gray-200 pt-8">
+                  <p className="text-xs text-gray-500 text-center">
                     © {new Date().getFullYear()} BirthdayHub. All rights reserved.
                   </p>
                 </div>
