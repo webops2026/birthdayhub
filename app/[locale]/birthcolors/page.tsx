@@ -190,7 +190,7 @@ export default function BirthcolorsPage() {
             Birth Colors
           </p>
           <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tight mb-6">
-            🎨 {isJa ? '誕生色' : 'Birth Colors'}
+            {isJa ? '誕生色' : 'Birth Colors'}
           </h1>
           <p className="text-stone-600 max-w-2xl mx-auto leading-relaxed text-lg">
             {isJa 
@@ -305,8 +305,7 @@ export default function BirthcolorsPage() {
                   <p className="text-xs text-stone-500 mb-2 tracking-wider">
                     {isJa ? '性格傾向' : 'PERSONALITY TRAITS'}
                   </p>
-                  <p className="text-sm text-stone-700 flex items-center gap-2">
-                    <span className="text-base">✨</span>
+                  <p className="text-sm text-stone-700">
                     {isJa ? colorData.personality : colorData.personalityEn}
                   </p>
                 </div>

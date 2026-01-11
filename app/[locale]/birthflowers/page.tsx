@@ -178,7 +178,7 @@ export default function BirthflowersPage() {
             Birth Flowers
           </p>
           <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tight mb-6">
-            🌸 {isJa ? '誕生花' : 'Birth Flowers'}
+            {isJa ? '誕生花' : 'Birth Flowers'}
           </h1>
           <p className="text-stone-600 max-w-2xl mx-auto leading-relaxed text-lg">
             {isJa 
@@ -244,16 +244,14 @@ export default function BirthflowersPage() {
                     </p>
                   </div>
                   
-                  {/* Flower Emoji - Larger */}
+                  {/* Flower Color - Elegant */}
                   <div 
-                    className="w-24 h-24 rounded-2xl shadow-lg flex-shrink-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-300"
+                    className="w-24 h-24 rounded-2xl shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
                     style={{ 
-                      backgroundColor: flower.color + '20',
-                      border: `2px solid ${flower.color}40`
+                      background: `linear-gradient(135deg, ${flower.color}60 0%, ${flower.color} 100%)`,
+                      boxShadow: `inset 0 2px 8px rgba(255,255,255,0.4), 0 8px 24px ${flower.color}40`
                     }}
-                  >
-                    {flower.emoji}
-                  </div>
+                  />
                 </div>
 
                 {/* Meaning */}
@@ -281,8 +279,7 @@ export default function BirthflowersPage() {
                   <p className="text-xs text-stone-500 mb-2 tracking-wider">
                     {isJa ? '開花時期' : 'BLOOMING SEASON'}
                   </p>
-                  <p className="text-sm text-stone-700 flex items-center gap-2">
-                    <span className="text-base">🌱</span>
+                  <p className="text-sm text-stone-700">
                     {isJa ? flower.season : flower.seasonEn}
                   </p>
                 </div>

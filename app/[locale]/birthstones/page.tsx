@@ -166,7 +166,7 @@ export default function BirthstonesPage() {
             Birthstones
           </p>
           <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tight mb-6">
-            💎 {isJa ? '誕生石' : 'Birthstones'}
+            {isJa ? '誕生石' : 'Birthstones'}
           </h1>
           <p className="text-stone-600 max-w-2xl mx-auto leading-relaxed text-lg">
             {isJa 
@@ -267,8 +267,7 @@ export default function BirthstonesPage() {
                   <p className="text-xs text-stone-500 mb-2 tracking-wider">
                     {isJa ? '効果・パワー' : 'EFFECTS & POWER'}
                   </p>
-                  <p className="text-sm text-stone-700 flex items-center gap-2">
-                    <span className="text-base">✨</span>
+                  <p className="text-sm text-stone-700">
                     {isJa ? stone.effects : stone.effectsEn}
                   </p>
                 </div>
