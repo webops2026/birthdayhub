@@ -172,6 +172,10 @@ function calculateEducation(birthYear: number, birthMonth: number, birthDay: num
   highSchoolGraduate: number;
   universityEnter: number;
   universityGraduate: number;
+  masterEnter: number;
+  masterGraduate: number;
+  doctoralEnter: number;
+  doctoralGraduate: number;
 } {
   // 4月1日以前生まれは早生まれとして前年度扱い
   // 4月2日〜翌年4月1日生まれが同じ学年
@@ -193,6 +197,10 @@ function calculateEducation(birthYear: number, birthMonth: number, birthDay: num
     highSchoolGraduate: schoolYear + 12,         // 高校卒業
     universityEnter: schoolYear + 12,            // 大学入学
     universityGraduate: schoolYear + 16,         // 大学卒業（4年制）
+    masterEnter: schoolYear + 16,                // 大学院（修士）入学
+    masterGraduate: schoolYear + 18,             // 大学院（修士）卒業（2年制）
+    doctoralEnter: schoolYear + 18,              // 大学院（博士）入学
+    doctoralGraduate: schoolYear + 21,           // 大学院（博士）卒業（3年制）
   };
 }
 
@@ -677,7 +685,7 @@ export default function HomePage() {
                 <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-6">
                   🎓 学歴年表
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                   <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50">
                     <p className="text-xs text-stone-500 mb-2">小学校</p>
                     <p className="text-sm font-semibold text-stone-700 mb-1">
@@ -712,6 +720,24 @@ export default function HomePage() {
                     </p>
                     <p className="text-sm font-semibold text-stone-700">
                       卒業: {educationData.universityGraduate}年
+                    </p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-rose-50 to-red-50">
+                    <p className="text-xs text-stone-500 mb-2">修士課程（2年制）</p>
+                    <p className="text-sm font-semibold text-stone-700 mb-1">
+                      入学: {educationData.masterEnter}年
+                    </p>
+                    <p className="text-sm font-semibold text-stone-700">
+                      卒業: {educationData.masterGraduate}年
+                    </p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-indigo-50 to-violet-50">
+                    <p className="text-xs text-stone-500 mb-2">博士課程（3年制）</p>
+                    <p className="text-sm font-semibold text-stone-700 mb-1">
+                      入学: {educationData.doctoralEnter}年
+                    </p>
+                    <p className="text-sm font-semibold text-stone-700">
+                      卒業: {educationData.doctoralGraduate}年
                     </p>
                   </div>
                 </div>
