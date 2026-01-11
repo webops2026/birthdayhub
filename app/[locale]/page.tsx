@@ -257,6 +257,21 @@ export default function HomePage() {
     setEraYear(wareki.eraYear);
   };
 
+  // 西暦モードに切り替え
+  const switchToSeireki = () => {
+    setUseWareki(false);
+    // 現在の和暦を西暦に変換（既に同期されているはず）
+  };
+
+  // 和暦モードに切り替え
+  const switchToWareki = () => {
+    setUseWareki(true);
+    // 現在の西暦を和暦に変換
+    const wareki = seirekiToWareki(year);
+    setSelectedEra(wareki.era);
+    setEraYear(wareki.eraYear);
+  };
+
   // 各元号の最大年数を取得
   const getMaxEraYear = (era: string): number => {
     const eraRanges: { [key: string]: { start: number; end: number } } = {
@@ -315,7 +330,7 @@ export default function HomePage() {
               <div className="flex justify-center gap-2 mb-4">
                 <button
                   type="button"
-                  onClick={() => setUseWareki(false)}
+                  onClick={switchToSeireki}
                   className={`px-6 py-2 text-sm font-medium rounded-lg transition-colors ${
                     !useWareki
                       ? 'bg-stone-900 text-white'
@@ -326,7 +341,7 @@ export default function HomePage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setUseWareki(true)}
+                  onClick={switchToWareki}
                   className={`px-6 py-2 text-sm font-medium rounded-lg transition-colors ${
                     useWareki
                       ? 'bg-stone-900 text-white'
