@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -243,9 +243,6 @@ export default function HomePage() {
   const zodiac = ZODIAC_SIGNS[zodiacSign];
   const chineseZodiac = CHINESE_ZODIAC[(year - 4) % 12];
   const japaneseEra = getJapaneseEra(currentYear);
-  
-  // 選択された誕生日の和暦を計算
-  const selectedDateWareki = seirekiToWareki(year);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 300);
@@ -272,6 +269,9 @@ export default function HomePage() {
     if (year >= 1912) return { era: '大正', eraYear: year - 1911 };
     return { era: '明治', eraYear: year - 1867 };
   };
+  
+  // 選択された誕生日の和暦を計算（useMemoで最適化）
+  const selectedDateWareki = useMemo(() => seirekiToWareki(year), [year]);
 
   // 和暦の年変更時に西暦を更新
   const handleEraYearChange = (newEraYear: number) => {
