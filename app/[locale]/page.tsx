@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase';
 
 interface Birthstone {
   id: string;
@@ -19,7 +19,6 @@ export default function HomePage() {
   const t = useTranslations('home');
   const tCommon = useTranslations('common');
   const router = useRouter();
-  const supabase = createClient();
 
   const today = new Date();
   const currentYear = today.getFullYear();
@@ -45,7 +44,7 @@ export default function HomePage() {
     };
 
     fetchTodayBirthstone();
-  }, [currentMonth, supabase]);
+  }, [currentMonth]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
