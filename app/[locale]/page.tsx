@@ -152,82 +152,143 @@ export default function HomePage() {
   const isJa = locale === 'ja';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-pink-50 to-purple-50">
-      {/* Hero Section - Today's Date */}
-      <section className="pt-12 pb-8 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-sm mb-6">
-            <span className="text-3xl">🎂</span>
-            <div className="text-left">
-              <p className="text-2xl font-bold text-gray-900">
-                {currentYear}年{currentMonth}月{currentDay}日
-              </p>
-              <p className="text-sm text-gray-500">{japaneseEra.era}{japaneseEra.eraYear}年</p>
+    <div className="min-h-screen bg-gradient-to-b from-orange-50/30 via-pink-50/30 to-purple-50/30">
+      {/* Hero Section - Integrated */}
+      <section className="pt-16 pb-12 px-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Today's Date + Input Form */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-sm mb-6 animate-fade-in">
+              <span className="text-3xl">🎂</span>
+              <div className="text-left">
+                <p className="text-2xl font-bold text-gray-900">
+                  {currentYear}年{currentMonth}月{currentDay}日
+                </p>
+                <p className="text-sm text-gray-500">{japaneseEra.era}{japaneseEra.eraYear}年</p>
+              </div>
             </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+              今日の誕生日情報
+            </h1>
+            
+            {/* Inline Birthday Input */}
+            <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8">
+              <div className="flex gap-3 bg-white rounded-2xl p-3 shadow-sm border border-gray-100">
+                <select
+                  value={year}
+                  onChange={(e) => setYear(Number(e.target.value))}
+                  className="flex-1 px-3 py-2 bg-gray-50 border-0 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+                >
+                  {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
+                    <option key={y} value={y}>{y}年</option>
+                  ))}
+                </select>
+                <select
+                  value={month}
+                  onChange={(e) => setMonth(Number(e.target.value))}
+                  className="flex-1 px-3 py-2 bg-gray-50 border-0 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+                >
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                    <option key={m} value={m}>{m}月</option>
+                  ))}
+                </select>
+                <select
+                  value={day}
+                  onChange={(e) => setDay(Number(e.target.value))}
+                  className="flex-1 px-3 py-2 bg-gray-50 border-0 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+                >
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+                    <option key={d} value={d}>{d}日</option>
+                  ))}
+                </select>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+                >
+                  検索
+                </button>
+              </div>
+            </form>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
-            今日の誕生日情報
-          </h1>
-          <p className="text-lg text-gray-600">
-            {currentMonth}月{currentDay}日生まれのあなたへ
-          </p>
         </div>
       </section>
 
-      {/* Main Info Grid - 全情報表示 */}
-      <section className="pb-12 px-6">
+      {/* Bento Grid - 全情報表示 */}
+      <section className="pb-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Bento Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-4">
             
-            {/* 誕生石 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">💎</span>
-                <h2 className="text-lg font-bold text-gray-900">誕生石</h2>
+            {/* 誕生石 - LARGE (Featured) */}
+            <div className="md:col-span-6 lg:col-span-5 bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all group">
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-3xl">💎</span>
+                <h2 className="text-xl font-bold text-gray-900">誕生石</h2>
               </div>
-              <div className="flex items-center gap-4 mb-3">
+              <div className="flex items-center gap-6 mb-6">
                 <div 
-                  className="w-16 h-16 rounded-full shadow-md flex-shrink-0"
+                  className="w-24 h-24 rounded-2xl shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform"
                   style={{ backgroundColor: todayBirthstone.color }}
                 />
                 <div>
-                  <p className="text-xl font-bold text-gray-900">{todayBirthstone.name_ja}</p>
-                  <p className="text-sm text-gray-500">{todayBirthstone.name_en}</p>
+                  <p className="text-4xl font-bold text-gray-900 mb-1">{todayBirthstone.name_ja}</p>
+                  <p className="text-lg text-gray-500">{todayBirthstone.name_en}</p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
                 {todayBirthstone.meaning_ja.map((m, i) => (
-                  <span key={i} className="px-3 py-1 bg-gray-50 text-gray-700 rounded-full text-sm">
+                  <span key={i} className="px-4 py-2 bg-gradient-to-r from-pink-50 to-purple-50 text-gray-700 rounded-full text-sm font-medium">
                     {m}
                   </span>
                 ))}
               </div>
             </div>
 
+            {/* 星座 */}
+            <div className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">⭐</span>
+                <h2 className="text-lg font-bold text-gray-900">星座</h2>
+              </div>
+              <p className="text-3xl font-bold text-gray-900 mb-2">{zodiac.name_ja}</p>
+              <p className="text-sm text-gray-500 mb-1">{zodiac.name_en}</p>
+              <p className="text-xs text-gray-400">{zodiac.period}</p>
+            </div>
+
+            {/* 和暦 */}
+            <div className="md:col-span-3 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">📅</span>
+                <h2 className="text-lg font-bold text-gray-900">和暦</h2>
+              </div>
+              <p className="text-3xl font-bold text-gray-900 mb-2">
+                {japaneseEra.era}{japaneseEra.eraYear}年
+              </p>
+              <p className="text-sm text-gray-500">{currentYear}年</p>
+            </div>
+
             {/* 誕生花 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🌸</span>
                 <h2 className="text-lg font-bold text-gray-900">誕生花</h2>
               </div>
-              <div className="mb-3">
-                <p className="text-xl font-bold text-gray-900 mb-1">{todayFlower.name_ja}</p>
-                <p className="text-sm text-gray-500 mb-2">{todayFlower.name_en}</p>
-                <div className="inline-block px-3 py-1 bg-pink-50 text-pink-700 rounded-full text-sm">
-                  {todayFlower.meaning}
-                </div>
+              <p className="text-2xl font-bold text-gray-900 mb-1">{todayFlower.name_ja}</p>
+              <p className="text-sm text-gray-500 mb-3">{todayFlower.name_en}</p>
+              <div className="inline-block px-3 py-1.5 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">
+                {todayFlower.meaning}
               </div>
             </div>
 
             {/* 誕生色 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="md:col-span-3 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🎨</span>
                 <h2 className="text-lg font-bold text-gray-900">誕生色</h2>
               </div>
               <div className="flex items-center gap-4 mb-3">
                 <div 
-                  className="w-16 h-16 rounded-lg shadow-md flex-shrink-0"
+                  className="w-16 h-16 rounded-xl shadow-md flex-shrink-0"
                   style={{ backgroundColor: todayColor.hex }}
                 />
                 <div>
@@ -238,191 +299,93 @@ export default function HomePage() {
               <p className="text-sm text-gray-600">{todayColor.personality}</p>
             </div>
 
-            {/* 星座 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">⭐</span>
-                <h2 className="text-lg font-bold text-gray-900">星座</h2>
-              </div>
-              <p className="text-xl font-bold text-gray-900 mb-1">{zodiac.name_ja}</p>
-              <p className="text-sm text-gray-500 mb-2">{zodiac.name_en}</p>
-              <p className="text-xs text-gray-400">{zodiac.period}</p>
-            </div>
-
             {/* 干支 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="md:col-span-2 lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🐉</span>
                 <h2 className="text-lg font-bold text-gray-900">干支</h2>
               </div>
-              <p className="text-xl font-bold text-gray-900 mb-1">{chineseZodiac.name_ja}</p>
+              <p className="text-2xl font-bold text-gray-900 mb-1">{chineseZodiac.name_ja}</p>
               <p className="text-sm text-gray-500">{chineseZodiac.name_en}</p>
             </div>
 
-            {/* 和暦 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">📅</span>
-                <h2 className="text-lg font-bold text-gray-900">和暦</h2>
-              </div>
-              <p className="text-xl font-bold text-gray-900 mb-1">
-                {japaneseEra.era}{japaneseEra.eraYear}年
-              </p>
-              <p className="text-sm text-gray-500">{currentYear}年（西暦）</p>
-            </div>
-
-            {/* 厄年 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">🙏</span>
-                <h2 className="text-lg font-bold text-gray-900">厄年</h2>
-              </div>
-              <p className="text-sm text-gray-600 mb-2">
-                男性: 25歳・42歳・61歳<br/>
-                女性: 19歳・33歳・37歳・61歳
-              </p>
-              <p className="text-xs text-gray-400">※本厄の年齢</p>
-            </div>
-
             {/* 六曜 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="md:col-span-2 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🌙</span>
                 <h2 className="text-lg font-bold text-gray-900">六曜</h2>
               </div>
-              <p className="text-xl font-bold text-gray-900 mb-1">大安</p>
-              <p className="text-sm text-gray-600">万事に吉、何事にも良い日</p>
+              <p className="text-2xl font-bold text-gray-900 mb-1">大安</p>
+              <p className="text-xs text-gray-600">万事に吉</p>
             </div>
 
             {/* 二十四節気 */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="md:col-span-2 lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🌾</span>
                 <h2 className="text-lg font-bold text-gray-900">二十四節気</h2>
               </div>
-              <p className="text-xl font-bold text-gray-900 mb-1">小寒</p>
-              <p className="text-sm text-gray-600">寒さが最も厳しくなる時期</p>
+              <p className="text-2xl font-bold text-gray-900 mb-1">小寒</p>
+              <p className="text-xs text-gray-600">寒の入り</p>
+            </div>
+
+            {/* 厄年 - WIDE */}
+            <div className="md:col-span-6 lg:col-span-6 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🙏</span>
+                <h2 className="text-lg font-bold text-gray-900">厄年</h2>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-gray-700 mb-2">男性</p>
+                  <p className="text-sm text-gray-600">25歳・42歳・61歳</p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-700 mb-2">女性</p>
+                  <p className="text-sm text-gray-600">19歳・33歳・37歳・61歳</p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-3">※本厄の年齢</p>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* Birthday Search */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              あなたの誕生日を調べる
-            </h2>
-            <p className="text-gray-600">
-              生年月日を入力すると、上記の情報すべてが表示されます
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="bg-gradient-to-br from-orange-50 to-pink-50 rounded-2xl p-8 border border-gray-200">
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  {tCommon('year')}
-                </label>
-                <select
-                  value={year}
-                  onChange={(e) => setYear(Number(e.target.value))}
-                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300 transition-all"
-                >
-                  {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  {tCommon('month')}
-                </label>
-                <select
-                  value={month}
-                  onChange={(e) => setMonth(Number(e.target.value))}
-                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300 transition-all"
-                >
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  {tCommon('day')}
-                </label>
-                <select
-                  value={day}
-                  onChange={(e) => setDay(Number(e.target.value))}
-                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300 transition-all"
-                >
-                  {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
-                    <option key={d} value={d}>{d}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            
-            <button
-              type="submit"
-              className="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 transition-all shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/30 text-lg"
-            >
-              🎂 誕生日情報をすべて見る
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* Features - Quick Access */}
-      <section className="py-16 px-6">
+      {/* Features - Simplified */}
+      <section className="py-12 px-6 bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              詳しく調べる
-            </h2>
-            <p className="text-gray-600">
-              各情報の一覧ページへ
-            </p>
-          </div>
-
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <a
               href={`/${locale}/birthstones`}
-              className="group p-6 bg-white rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
             >
-              <span className="text-3xl mb-3 block">💎</span>
-              <h3 className="font-bold text-gray-900 mb-1">{t('exploreBirthstones')}</h3>
-              <p className="text-sm text-gray-500">{t('exploreBirthstonesDesc')}</p>
+              <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">💎</span>
+              <h3 className="font-bold text-gray-900">{t('exploreBirthstones')}</h3>
             </a>
 
             <a
               href={`/${locale}/birthflowers`}
-              className="group p-6 bg-white rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
             >
-              <span className="text-3xl mb-3 block">🌸</span>
-              <h3 className="font-bold text-gray-900 mb-1">{t('exploreBirthflowers')}</h3>
-              <p className="text-sm text-gray-500">{t('exploreBirthflowersDesc')}</p>
+              <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">🌸</span>
+              <h3 className="font-bold text-gray-900">{t('exploreBirthflowers')}</h3>
             </a>
 
             <a
               href={`/${locale}/birthcolors`}
-              className="group p-6 bg-white rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
             >
-              <span className="text-3xl mb-3 block">🎨</span>
-              <h3 className="font-bold text-gray-900 mb-1">{t('exploreBirthcolors')}</h3>
-              <p className="text-sm text-gray-500">{t('exploreBirthcolorsDesc')}</p>
+              <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">🎨</span>
+              <h3 className="font-bold text-gray-900">{t('exploreBirthcolors')}</h3>
             </a>
 
             <a
               href={`/${locale}/age-calculator`}
-              className="group p-6 bg-white rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all"
+              className="group p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-pink-200 hover:shadow-md transition-all text-center"
             >
-              <span className="text-3xl mb-3 block">📅</span>
-              <h3 className="font-bold text-gray-900 mb-1">和暦変換</h3>
-              <p className="text-sm text-gray-500">西暦と和暦を相互変換</p>
+              <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">📅</span>
+              <h3 className="font-bold text-gray-900">和暦変換</h3>
             </a>
           </div>
         </div>
