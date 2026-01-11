@@ -296,55 +296,6 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-12 gap-4">
             
-            {/* Birthstone - HERO CARD (Large) */}
-            <div 
-              className="col-span-12 lg:col-span-8 row-span-2 bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 group relative"
-            >
-              {/* Background Gradient */}
-              <div 
-                className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
-                style={{
-                  background: `radial-gradient(circle at 30% 50%, ${todayBirthstone.color} 0%, transparent 70%)`
-                }}
-              />
-              
-              <div className="relative z-10 p-12">
-                <div className="flex items-start justify-between mb-8">
-                  <div>
-                    <p className="text-sm font-medium text-stone-500 tracking-widest uppercase mb-3">
-                      Birthstone · {currentMonth}月
-                    </p>
-                    <h2 className="text-6xl font-bold text-stone-900 mb-3 tracking-tight">
-                      {todayBirthstone.name_ja}
-                    </h2>
-                    <p className="text-2xl text-stone-400 font-light tracking-wide">
-                      {todayBirthstone.name_en}
-                    </p>
-                  </div>
-                  
-                  {/* Gem Visual */}
-                  <div 
-                    className="w-32 h-32 rounded-full shadow-2xl flex-shrink-0 group-hover:scale-110 transition-transform duration-500"
-                    style={{ 
-                      backgroundColor: todayBirthstone.color,
-                      boxShadow: `0 20px 60px ${todayBirthstone.color}40`
-                    }}
-                  />
-                </div>
-                
-                <div className="flex gap-3">
-                  {todayBirthstone.meaning_ja.map((m, i) => (
-                    <span 
-                      key={i} 
-                      className="px-5 py-2.5 bg-stone-50 text-stone-700 rounded-full text-sm font-medium tracking-wide"
-                    >
-                      {m}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             {/* Age Card */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
@@ -401,10 +352,10 @@ export default function HomePage() {
                 {zodiac.name_ja}
               </h3>
               <p className="text-stone-500 text-sm">{zodiac.name_en}</p>
-              <p className="text-xs text-stone-400 mt-3">{zodiac.period}</p>
+              <p className="text-xs text-stone-400 mt-2">{zodiac.period}</p>
             </div>
 
-            {/* Japanese Era */}
+            {/* Era */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
                 Era
@@ -415,7 +366,67 @@ export default function HomePage() {
               <p className="text-stone-500 text-sm">{currentYear}年</p>
             </div>
 
-            {/* Birth Flower */}
+            {/* Chinese Zodiac */}
+            <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
+                Chinese Zodiac
+              </p>
+              <h3 className="text-2xl font-bold text-stone-900 mb-1">
+                {chineseZodiac.name_ja}
+              </h3>
+              <p className="text-stone-500 text-sm">{chineseZodiac.name_en}</p>
+            </div>
+            
+            {/* Birthstone - HERO CARD (Large) */}
+            <div 
+              className="col-span-12 lg:col-span-8 row-span-2 bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 group relative"
+            >
+              {/* Background Gradient */}
+              <div 
+                className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
+                style={{
+                  background: `radial-gradient(circle at 30% 50%, ${todayBirthstone.color} 0%, transparent 70%)`
+                }}
+              />
+              
+              <div className="relative z-10 p-12">
+                <div className="flex items-start justify-between mb-8">
+                  <div>
+                    <p className="text-sm font-medium text-stone-500 tracking-widest uppercase mb-3">
+                      Birthstone · {currentMonth}月
+                    </p>
+                    <h2 className="text-6xl font-bold text-stone-900 mb-3 tracking-tight">
+                      {todayBirthstone.name_ja}
+                    </h2>
+                    <p className="text-2xl text-stone-400 font-light tracking-wide">
+                      {todayBirthstone.name_en}
+                    </p>
+                  </div>
+                  
+                  {/* Gem Visual */}
+                  <div 
+                    className="w-32 h-32 rounded-full shadow-2xl flex-shrink-0 group-hover:scale-110 transition-transform duration-500"
+                    style={{ 
+                      backgroundColor: todayBirthstone.color,
+                      boxShadow: `0 20px 60px ${todayBirthstone.color}40`
+                    }}
+                  />
+                </div>
+                
+                <div className="flex gap-3">
+                  {todayBirthstone.meaning_ja.map((m, i) => (
+                    <span 
+                      key={i} 
+                      className="px-5 py-2.5 bg-stone-50 text-stone-700 rounded-full text-sm font-medium tracking-wide"
+                    >
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Flower */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
                 Flower
@@ -427,7 +438,7 @@ export default function HomePage() {
               <p className="text-stone-600 text-sm">{todayFlower.meaning}</p>
             </div>
 
-            {/* Birth Color */}
+            {/* Color */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
                 Color
@@ -444,17 +455,6 @@ export default function HomePage() {
                   <p className="text-xs text-stone-400 font-mono">{todayColor.hex}</p>
                 </div>
               </div>
-            </div>
-
-            {/* Chinese Zodiac */}
-            <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
-              <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
-                Chinese Zodiac
-              </p>
-              <h3 className="text-2xl font-bold text-stone-900 mb-1">
-                {chineseZodiac.name_ja}
-              </h3>
-              <p className="text-stone-500 text-sm">{chineseZodiac.name_en}</p>
             </div>
 
             {/* Rokuyou */}
