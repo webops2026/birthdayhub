@@ -3,7 +3,21 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { Inter, Noto_Sans_JP } from 'next/font/google';
+import MobileMenu from '@/components/MobileMenu';
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-noto-sans-jp',
+});
 
 export const metadata: Metadata = {
   title: "BirthdayHub - あなたの誕生日の、すべてがここに",
@@ -44,12 +58,7 @@ export default async function LocaleLayout({
       ];
 
   return (
-    <html lang={locale}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </head>
+    <html lang={locale} className={`${inter.variable} ${notoSansJP.variable}`}>
       <body className="font-sans antialiased bg-stone-50 text-stone-900">
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen flex flex-col">
@@ -69,6 +78,7 @@ export default async function LocaleLayout({
 
                   {/* Navigation */}
                   <div className="flex items-center gap-8">
+                    {/* Desktop Menu */}
                     <div className="hidden md:flex items-center gap-2">
                       {navItems.map((item) => (
                         <a
@@ -81,8 +91,8 @@ export default async function LocaleLayout({
                       ))}
                     </div>
 
-                    {/* Language Switcher */}
-                    <div className="flex items-center border-l border-stone-200 pl-6">
+                    {/* Language Switcher - Desktop */}
+                    <div className="hidden md:flex items-center border-l border-stone-200 pl-6">
                       <a
                         href="/ja"
                         className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
@@ -104,6 +114,9 @@ export default async function LocaleLayout({
                         EN
                       </a>
                     </div>
+
+                    {/* Mobile Menu */}
+                    <MobileMenu locale={locale} navItems={navItems} />
                   </div>
                 </div>
               </nav>

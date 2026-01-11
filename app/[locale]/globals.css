@@ -2,9 +2,9 @@
 
 /* Modern Luxury Theme - 2026 */
 
-/* Fonts */
+/* Fonts - Next.js Font Optimization */
 body {
-  font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-inter), var(--font-noto-sans-jp), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
