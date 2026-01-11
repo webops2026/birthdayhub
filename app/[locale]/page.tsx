@@ -689,55 +689,55 @@ export default function HomePage() {
                   <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50">
                     <p className="text-xs text-stone-500 mb-2">小学校</p>
                     <p className="text-sm font-semibold text-stone-700 mb-1">
-                      入学: {educationData.elementarySchoolEnter}年
+                      入学: {educationData.elementarySchoolEnter}年 6歳
                     </p>
                     <p className="text-sm font-semibold text-stone-700">
-                      卒業: {educationData.elementarySchoolGraduate}年
+                      卒業: {educationData.elementarySchoolGraduate}年 12歳
                     </p>
                   </div>
                   <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50">
                     <p className="text-xs text-stone-500 mb-2">中学校</p>
                     <p className="text-sm font-semibold text-stone-700 mb-1">
-                      入学: {educationData.juniorHighSchoolEnter}年
+                      入学: {educationData.juniorHighSchoolEnter}年 12歳
                     </p>
                     <p className="text-sm font-semibold text-stone-700">
-                      卒業: {educationData.juniorHighSchoolGraduate}年
+                      卒業: {educationData.juniorHighSchoolGraduate}年 15歳
                     </p>
                   </div>
                   <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-50 to-amber-50">
                     <p className="text-xs text-stone-500 mb-2">高校</p>
                     <p className="text-sm font-semibold text-stone-700 mb-1">
-                      入学: {educationData.highSchoolEnter}年
+                      入学: {educationData.highSchoolEnter}年 15歳
                     </p>
                     <p className="text-sm font-semibold text-stone-700">
-                      卒業: {educationData.highSchoolGraduate}年
+                      卒業: {educationData.highSchoolGraduate}年 18歳
                     </p>
                   </div>
                   <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50">
                     <p className="text-xs text-stone-500 mb-2">大学（4年制）</p>
                     <p className="text-sm font-semibold text-stone-700 mb-1">
-                      入学: {educationData.universityEnter}年
+                      入学: {educationData.universityEnter}年 18歳
                     </p>
                     <p className="text-sm font-semibold text-stone-700">
-                      卒業: {educationData.universityGraduate}年
+                      卒業: {educationData.universityGraduate}年 22歳
                     </p>
                   </div>
                   <div className="text-center p-4 rounded-xl bg-gradient-to-br from-rose-50 to-red-50">
                     <p className="text-xs text-stone-500 mb-2">修士課程（2年制）</p>
                     <p className="text-sm font-semibold text-stone-700 mb-1">
-                      入学: {educationData.masterEnter}年
+                      入学: {educationData.masterEnter}年 22歳
                     </p>
                     <p className="text-sm font-semibold text-stone-700">
-                      卒業: {educationData.masterGraduate}年
+                      卒業: {educationData.masterGraduate}年 24歳
                     </p>
                   </div>
                   <div className="text-center p-4 rounded-xl bg-gradient-to-br from-indigo-50 to-violet-50">
                     <p className="text-xs text-stone-500 mb-2">博士課程（3年制）</p>
                     <p className="text-sm font-semibold text-stone-700 mb-1">
-                      入学: {educationData.doctoralEnter}年
+                      入学: {educationData.doctoralEnter}年 24歳
                     </p>
                     <p className="text-sm font-semibold text-stone-700">
-                      卒業: {educationData.doctoralGraduate}年
+                      卒業: {educationData.doctoralGraduate}年 27歳
                     </p>
                   </div>
                 </div>
