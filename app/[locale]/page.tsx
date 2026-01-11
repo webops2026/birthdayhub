@@ -4,81 +4,57 @@ import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+// Data Types mimicking database properties
 interface Birthstone {
+  id: string;
   month: number;
   name_ja: string;
   name_en: string;
   meaning_ja: string[];
   meaning_en: string[];
   color: string;
+  bg_class: string;
 }
 
+// Notion colors adapted for Tailwind
+const NOTION_COLORS = {
+  default: 'bg-white',
+  gray: 'bg-[#f1f1ef]',
+  brown: 'bg-[#f4eeee]',
+  orange: 'bg-[#fbecdd]',
+  yellow: 'bg-[#fbf3db]',
+  green: 'bg-[#edf3ec]',
+  blue: 'bg-[#e7f3f8]',
+  purple: 'bg-[#f6f3f9]',
+  pink: 'bg-[#fafffa]',
+  red: 'bg-[#fdebec]',
+};
+
+// Data with Notion color tags
 const BIRTHSTONES: Record<number, Birthstone> = {
-  1: { month: 1, name_ja: 'ガーネット', name_en: 'Garnet', meaning_ja: ['真実', '友愛'], meaning_en: ['Truth', 'Friendship'], color: '#8B2942' },
-  2: { month: 2, name_ja: 'アメジスト', name_en: 'Amethyst', meaning_ja: ['誠実', '心の平和'], meaning_en: ['Sincerity', 'Peace'], color: '#7B5EA7' },
-  3: { month: 3, name_ja: 'アクアマリン', name_en: 'Aquamarine', meaning_ja: ['沈着', '勇敢'], meaning_en: ['Composure', 'Courage'], color: '#6BA3BE' },
-  4: { month: 4, name_ja: 'ダイヤモンド', name_en: 'Diamond', meaning_ja: ['永遠の絆', '純潔'], meaning_en: ['Eternal Bond', 'Purity'], color: '#B8C4CE' },
-  5: { month: 5, name_ja: 'エメラルド', name_en: 'Emerald', meaning_ja: ['幸運', '希望'], meaning_en: ['Fortune', 'Hope'], color: '#3D8B5F' },
-  6: { month: 6, name_ja: 'パール', name_en: 'Pearl', meaning_ja: ['健康', '富'], meaning_en: ['Health', 'Wealth'], color: '#E8DFD0' },
-  7: { month: 7, name_ja: 'ルビー', name_en: 'Ruby', meaning_ja: ['情熱', '仁愛'], meaning_en: ['Passion', 'Love'], color: '#A4243B' },
-  8: { month: 8, name_ja: 'ペリドット', name_en: 'Peridot', meaning_ja: ['夫婦の幸福', '和合'], meaning_en: ['Harmony', 'Fortune'], color: '#7D9B4A' },
-  9: { month: 9, name_ja: 'サファイア', name_en: 'Sapphire', meaning_ja: ['誠実', '慈愛'], meaning_en: ['Sincerity', 'Charity'], color: '#3A5BA0' },
-  10: { month: 10, name_ja: 'オパール', name_en: 'Opal', meaning_ja: ['歓喜', '希望'], meaning_en: ['Joy', 'Hope'], color: '#A7B5A6' },
-  11: { month: 11, name_ja: 'トパーズ', name_en: 'Topaz', meaning_ja: ['友情', '潔白'], meaning_en: ['Friendship', 'Innocence'], color: '#D4A84B' },
-  12: { month: 12, name_ja: 'ターコイズ', name_en: 'Turquoise', meaning_ja: ['成功', '繁栄'], meaning_en: ['Success', 'Prosperity'], color: '#4A9B9B' }
+  1: { id: '1', month: 1, name_ja: 'ガーネット', name_en: 'Garnet', meaning_ja: ['真実', '友愛'], meaning_en: ['Truth', 'Friendship'], color: '#B03060', bg_class: 'bg-[#fdebec] text-[#d44c47]' }, // Red
+  2: { id: '2', month: 2, name_ja: 'アメジスト', name_en: 'Amethyst', meaning_ja: ['誠実'], meaning_en: ['Sincerity'], color: '#9966CC', bg_class: 'bg-[#f6f3f9] text-[#9065b0]' }, // Purple
+  3: { id: '3', month: 3, name_ja: 'アクアマリン', name_en: 'Aquamarine', meaning_ja: ['沈着'], meaning_en: ['Composure'], color: '#7FFFD4', bg_class: 'bg-[#e7f3f8] text-[#337ea9]' }, // Blue
+  4: { id: '4', month: 4, name_ja: 'ダイヤモンド', name_en: 'Diamond', meaning_ja: ['永遠の絆'], meaning_en: ['Eternal Bond'], color: '#E0FFFF', bg_class: 'bg-[#f1f1ef] text-[#787774]' }, // Gray
+  5: { id: '5', month: 5, name_ja: 'エメラルド', name_en: 'Emerald', meaning_ja: ['幸運'], meaning_en: ['Fortune'], color: '#50C878', bg_class: 'bg-[#edf3ec] text-[#448361]' }, // Green
+  6: { id: '6', month: 6, name_ja: 'パール', name_en: 'Pearl', meaning_ja: ['健康'], meaning_en: ['Health'], color: '#F0EAD6', bg_class: 'bg-[#fbf3db] text-[#cb912f]' }, // Yellow
+  7: { id: '7', month: 7, name_ja: 'ルビー', name_en: 'Ruby', meaning_ja: ['情熱'], meaning_en: ['Passion'], color: '#E0115F', bg_class: 'bg-[#fdebec] text-[#d44c47]' }, // Red
+  8: { id: '8', month: 8, name_ja: 'ペリドット', name_en: 'Peridot', meaning_ja: ['和合'], meaning_en: ['Harmony'], color: '#9ACD32', bg_class: 'bg-[#edf3ec] text-[#448361]' }, // Green
+  9: { id: '9', month: 9, name_ja: 'サファイア', name_en: 'Sapphire', meaning_ja: ['誠実'], meaning_en: ['Sincerity'], color: '#0F52BA', bg_class: 'bg-[#e7f3f8] text-[#337ea9]' }, // Blue
+  10: { id: '10', month: 10, name_ja: 'オパール', name_en: 'Opal', meaning_ja: ['歓喜'], meaning_en: ['Joy'], color: '#A8C3BC', bg_class: 'bg-[#fbecdd] text-[#d9730d]' }, // Orange
+  11: { id: '11', month: 11, name_ja: 'トパーズ', name_en: 'Topaz', meaning_ja: ['友情'], meaning_en: ['Friendship'], color: '#FFC87C', bg_class: 'bg-[#fbf3db] text-[#cb912f]' }, // Yellow
+  12: { id: '12', month: 12, name_ja: 'ターコイズ', name_en: 'Turquoise', meaning_ja: ['成功'], meaning_en: ['Success'], color: '#40E0D0', bg_class: 'bg-[#e7f3f8] text-[#337ea9]' } // Blue
 };
 
-const BIRTH_FLOWERS: Record<number, { name_ja: string; name_en: string; meaning_ja: string; meaning_en: string }> = {
-  1: { name_ja: 'カーネーション', name_en: 'Carnation', meaning_ja: '無垢で深い愛', meaning_en: 'Pure love' },
-  2: { name_ja: 'スミレ', name_en: 'Violet', meaning_ja: '誠実・謙虚', meaning_en: 'Faithfulness' },
-  3: { name_ja: 'スイセン', name_en: 'Daffodil', meaning_ja: '希望・再生', meaning_en: 'Rebirth' },
-  4: { name_ja: 'デイジー', name_en: 'Daisy', meaning_ja: '純潔・無邪気', meaning_en: 'Innocence' },
-  5: { name_ja: 'スズラン', name_en: 'Lily of the Valley', meaning_ja: '幸福の再来', meaning_en: 'Happiness' },
-  6: { name_ja: 'バラ', name_en: 'Rose', meaning_ja: '愛・美', meaning_en: 'Love' },
-  7: { name_ja: 'ハス', name_en: 'Lotus', meaning_ja: '清純・神聖', meaning_en: 'Purity' },
-  8: { name_ja: 'グラジオラス', name_en: 'Gladiolus', meaning_ja: '勝利・誠実', meaning_en: 'Victory' },
-  9: { name_ja: 'アスター', name_en: 'Aster', meaning_ja: '信頼・追憶', meaning_en: 'Trust' },
-  10: { name_ja: 'キク', name_en: 'Chrysanthemum', meaning_ja: '高貴・長寿', meaning_en: 'Nobility' },
-  11: { name_ja: 'キンセンカ', name_en: 'Marigold', meaning_ja: '変わらぬ愛', meaning_en: 'Eternal love' },
-  12: { name_ja: 'ポインセチア', name_en: 'Poinsettia', meaning_ja: '祝福・聖なる願い', meaning_en: 'Celebration' }
+// Icons as SVG components
+const Icons = {
+  Search: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>,
+  Calendar: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>,
+  ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>,
+  Grid: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>,
 };
-
-function getWareki(year: number): string {
-  if (year >= 2019) return `令和${year - 2018}年`;
-  if (year >= 1989) return `平成${year - 1988}年`;
-  if (year >= 1926) return `昭和${year - 1925}年`;
-  return `大正${year - 1911}年`;
-}
-
-const ROKUYOU = ['大安', '赤口', '先勝', '友引', '先負', '仏滅'];
-const ETO = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-
-function getZodiac(month: number, day: number): { ja: string; en: string } {
-  const zodiacs = [
-    { ja: 'やぎ座', en: 'Capricorn', start: [12, 22], end: [1, 19] },
-    { ja: 'みずがめ座', en: 'Aquarius', start: [1, 20], end: [2, 18] },
-    { ja: 'うお座', en: 'Pisces', start: [2, 19], end: [3, 20] },
-    { ja: 'おひつじ座', en: 'Aries', start: [3, 21], end: [4, 19] },
-    { ja: 'おうし座', en: 'Taurus', start: [4, 20], end: [5, 20] },
-    { ja: 'ふたご座', en: 'Gemini', start: [5, 21], end: [6, 21] },
-    { ja: 'かに座', en: 'Cancer', start: [6, 22], end: [7, 22] },
-    { ja: 'しし座', en: 'Leo', start: [7, 23], end: [8, 22] },
-    { ja: 'おとめ座', en: 'Virgo', start: [8, 23], end: [9, 22] },
-    { ja: 'てんびん座', en: 'Libra', start: [9, 23], end: [10, 23] },
-    { ja: 'さそり座', en: 'Scorpio', start: [10, 24], end: [11, 22] },
-    { ja: 'いて座', en: 'Sagittarius', start: [11, 23], end: [12, 21] },
-  ];
-  
-  for (const z of zodiacs) {
-    if ((month === z.start[0] && day >= z.start[1]) || (month === z.end[0] && day <= z.end[1])) {
-      return { ja: z.ja, en: z.en };
-    }
-  }
-  return { ja: 'やぎ座', en: 'Capricorn' };
-}
 
 export default function HomePage() {
-  const t = useTranslations('home');
   const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
@@ -93,12 +69,9 @@ export default function HomePage() {
   const [day, setDay] = useState(currentDay);
 
   const isJa = locale === 'ja';
+  
+  // Dynamic data (simplified for this view)
   const birthstone = BIRTHSTONES[currentMonth];
-  const birthflower = BIRTH_FLOWERS[currentMonth];
-  const zodiac = getZodiac(currentMonth, currentDay);
-  const wareki = getWareki(currentYear);
-  const eto = ETO[(currentYear - 4) % 12];
-  const rokuyou = ROKUYOU[currentDay % 6];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,228 +79,164 @@ export default function HomePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
-      {/* Today's Date */}
-      <div className="mb-12">
-        <p className="text-sm text-neutral-500 mb-2">
-          {isJa ? '今日' : 'Today'}
-        </p>
-        <h1 className="text-3xl font-semibold text-neutral-900 mb-1">
-          {isJa 
-            ? `${currentYear}年${currentMonth}月${currentDay}日`
-            : new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-          }
-        </h1>
-        <p className="text-neutral-500">
-          {isJa ? `${wareki} / ${rokuyou}` : zodiac.en}
-        </p>
-      </div>
-
-      {/* Search */}
-      <div className="mb-16 p-6 bg-neutral-50 rounded-lg">
-        <h2 className="text-lg font-medium text-neutral-900 mb-4">
-          {isJa ? '誕生日を調べる' : 'Look up a birthday'}
-        </h2>
-        <form onSubmit={handleSubmit} className="flex flex-wrap gap-3">
-          <select
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-            className="px-4 py-2.5 bg-white border border-neutral-200 rounded-md text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-          >
-            {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
-          <select
-            value={month}
-            onChange={(e) => setMonth(Number(e.target.value))}
-            className="px-4 py-2.5 bg-white border border-neutral-200 rounded-md text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-          >
-            {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-              <option key={m} value={m}>{isJa ? `${m}月` : m}</option>
-            ))}
-          </select>
-          <select
-            value={day}
-            onChange={(e) => setDay(Number(e.target.value))}
-            className="px-4 py-2.5 bg-white border border-neutral-200 rounded-md text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-          >
-            {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
-          <button
-            type="submit"
-            className="px-6 py-2.5 bg-neutral-900 text-white text-sm font-medium rounded-md hover:bg-neutral-800 transition-colors"
-          >
-            {isJa ? '調べる' : 'Search'}
-          </button>
-        </form>
-      </div>
-
-      {/* Today's Info */}
-      <section className="mb-16">
-        <h2 className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-6">
-          {isJa ? '今日の情報' : "Today's Info"}
-        </h2>
-        
-        <div className="space-y-1">
-          {/* Birthstone */}
-          <a 
-            href={`/${locale}/birthstones/${currentMonth}`}
-            className="flex items-center justify-between py-4 border-b border-neutral-100 hover:bg-neutral-50 -mx-3 px-3 rounded transition-colors group"
-          >
-            <div className="flex items-center gap-4">
-              <div 
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: birthstone.color }}
-              />
-              <div>
-                <p className="text-sm text-neutral-500">{isJa ? '誕生石' : 'Birthstone'}</p>
-                <p className="text-neutral-900 font-medium">
-                  {isJa ? birthstone.name_ja : birthstone.name_en}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-neutral-400">
-                {(isJa ? birthstone.meaning_ja : birthstone.meaning_en).join('・')}
-              </span>
-              <span className="text-neutral-300 group-hover:text-neutral-500 transition-colors">→</span>
-            </div>
-          </a>
-
-          {/* Birth Flower */}
-          <a 
-            href={`/${locale}/birthflowers`}
-            className="flex items-center justify-between py-4 border-b border-neutral-100 hover:bg-neutral-50 -mx-3 px-3 rounded transition-colors group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-3 h-3 rounded-full bg-pink-300" />
-              <div>
-                <p className="text-sm text-neutral-500">{isJa ? '誕生花' : 'Birth Flower'}</p>
-                <p className="text-neutral-900 font-medium">
-                  {isJa ? birthflower.name_ja : birthflower.name_en}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-neutral-400">
-                {isJa ? birthflower.meaning_ja : birthflower.meaning_en}
-              </span>
-              <span className="text-neutral-300 group-hover:text-neutral-500 transition-colors">→</span>
-            </div>
-          </a>
-
-          {/* Zodiac */}
-          <div className="flex items-center justify-between py-4 border-b border-neutral-100">
-            <div className="flex items-center gap-4">
-              <div className="w-3 h-3 rounded-full bg-indigo-300" />
-              <div>
-                <p className="text-sm text-neutral-500">{isJa ? '星座' : 'Zodiac Sign'}</p>
-                <p className="text-neutral-900 font-medium">
-                  {isJa ? zodiac.ja : zodiac.en}
-                </p>
-              </div>
-            </div>
-          </div>
+    <div className="font-sans text-[#37352f]">
+      {/* Page Icon & Title */}
+      <div className="mb-12 group">
+        <div className="text-[78px] leading-none mb-4 select-none cursor-default transition-transform origin-left hover:scale-110 duration-200">
+          📅
         </div>
-      </section>
+        <h1 className="text-4xl font-bold border-b border-[#e9e9e7] pb-4 mb-2">
+          {isJa ? '今日の情報' : "Today's Overview"}
+        </h1>
+        <div className="flex items-center gap-2 text-[#787774] text-sm">
+          <span className="flex items-center gap-1">
+            <Icons.Calendar />
+            {currentYear}/{currentMonth}/{currentDay}
+          </span>
+          <span>•</span>
+          <span className="bg-[#e7f3f8] text-[#337ea9] px-1.5 rounded text-xs py-0.5">
+            Today
+          </span>
+        </div>
+      </div>
 
-      {/* Japanese Culture - only for Japanese locale */}
-      {isJa && (
-        <section className="mb-16">
-          <h2 className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-6">
-            日本の暦
-          </h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div>
-              <p className="text-sm text-neutral-500 mb-1">和暦</p>
-              <p className="text-neutral-900 font-medium">{wareki}</p>
-            </div>
-            <div>
-              <p className="text-sm text-neutral-500 mb-1">干支</p>
-              <p className="text-neutral-900 font-medium">{eto}年</p>
-            </div>
-            <div>
-              <p className="text-sm text-neutral-500 mb-1">六曜</p>
-              <p className="text-neutral-900 font-medium">{rokuyou}</p>
-            </div>
-            <div>
-              <p className="text-sm text-neutral-500 mb-1">旧暦</p>
-              <p className="text-neutral-900 font-medium">12月13日</p>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Callout Block (Notion style) */}
+      <div className="bg-[#f1f1ef] p-4 rounded-md flex gap-4 mb-12 border border-transparent hover:border-[#dfdfde] transition-colors">
+        <div className="text-2xl select-none">💡</div>
+        <div className="flex-1">
+          <h3 className="font-semibold mb-1">
+            {isJa ? '今日は何の日？' : 'Did you know?'}
+          </h3>
+          <p className="text-sm text-[#37352f]">
+            {isJa 
+              ? `今日は${currentMonth}月の誕生石「${birthstone.name_ja}」の日です。石言葉は「${birthstone.meaning_ja.join('・')}」。`
+              : `Today is the day of "${birthstone.name_en}", the birthstone for ${currentMonth}. It symbolizes ${birthstone.meaning_en.join(' and ')}.`
+            }
+          </p>
+        </div>
+      </div>
 
-      {/* 12 Month Birthstones */}
-      <section className="mb-16">
-        <h2 className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-6">
-          {isJa ? '12ヶ月の誕生石' : 'Birthstones by Month'}
-        </h2>
+      {/* Database View: Search */}
+      <div className="mb-12">
+        <div className="flex items-center gap-2 mb-3 text-sm font-semibold text-[#787774] uppercase tracking-wider">
+          <Icons.Search />
+          {isJa ? '誕生日を検索' : 'Search Birthday'}
+        </div>
         
-        <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
+        <div className="border border-[#e9e9e7] rounded-lg overflow-hidden">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-[#e9e9e7]">
+            <div className="flex-1 hover:bg-[#f7f7f5] transition-colors">
+              <select
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+                className="w-full p-3 bg-transparent text-sm focus:outline-none cursor-pointer"
+              >
+                {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
+                  <option key={y} value={y}>{y}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex-1 hover:bg-[#f7f7f5] transition-colors">
+              <select
+                value={month}
+                onChange={(e) => setMonth(Number(e.target.value))}
+                className="w-full p-3 bg-transparent text-sm focus:outline-none cursor-pointer"
+              >
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                  <option key={m} value={m}>{isJa ? `${m}月` : m}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex-1 hover:bg-[#f7f7f5] transition-colors">
+              <select
+                value={day}
+                onChange={(e) => setDay(Number(e.target.value))}
+                className="w-full p-3 bg-transparent text-sm focus:outline-none cursor-pointer"
+              >
+                {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="bg-white hover:bg-[#f7f7f5] text-[#37352f] px-6 py-3 text-sm font-medium transition-colors border-l-0 sm:border-l border-[#e9e9e7]"
+            >
+              {isJa ? '開く' : 'Open'}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Database View: Gallery (Birthstones) */}
+      <div className="mb-12">
+        <div className="flex items-center justify-between mb-4 border-b border-[#e9e9e7] pb-2">
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#37352f]">
+            <Icons.Grid />
+            {isJa ? '誕生石データベース' : 'Birthstone Database'}
+          </div>
+          <span className="text-xs text-[#9b9a97] bg-[#f1f1ef] px-1.5 py-0.5 rounded">12 items</span>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Object.values(BIRTHSTONES).map((stone) => (
             <a
-              key={stone.month}
+              key={stone.id}
               href={`/${locale}/birthstones/${stone.month}`}
-              className="group p-4 rounded-lg border border-neutral-100 hover:border-neutral-300 transition-colors"
+              className="group border border-[#e9e9e7] rounded-lg overflow-hidden hover:bg-[#f7f7f5] transition-all cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)]"
             >
-              <div className="flex items-center gap-3 mb-2">
-                <div 
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: stone.color }}
-                />
-                <span className="text-xs text-neutral-400">
-                  {stone.month}{isJa ? '月' : ''}
-                </span>
+              <div className={`h-24 ${stone.bg_class} flex items-center justify-center text-4xl opacity-80 group-hover:opacity-100 transition-opacity`}>
+                💎
               </div>
-              <p className="text-sm font-medium text-neutral-900 group-hover:text-neutral-600 transition-colors">
-                {isJa ? stone.name_ja : stone.name_en}
-              </p>
+              <div className="p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-lg">💎</span>
+                  <span className="font-medium text-sm truncate">
+                    {isJa ? stone.name_ja : stone.name_en}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-[#f1f1ef] text-[#787774] text-[10px] px-1.5 py-0.5 rounded">
+                    {stone.month}{isJa ? '月' : ''}
+                  </span>
+                  {(isJa ? stone.meaning_ja : stone.meaning_en).map((m, i) => (
+                    <span key={i} className={`${stone.bg_class} text-[10px] px-1.5 py-0.5 rounded truncate max-w-full`}>
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </a>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* Categories */}
-      <section>
-        <h2 className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-6">
+      {/* Link List View (Categories) */}
+      <div className="mb-12">
+        <div className="border-b border-[#e9e9e7] pb-2 mb-2 text-sm font-semibold text-[#37352f]">
           {isJa ? 'カテゴリー' : 'Categories'}
-        </h2>
-        
-        <div className="grid md:grid-cols-3 gap-4">
-          <a
-            href={`/${locale}/birthstones`}
-            className="p-6 rounded-lg border border-neutral-200 hover:border-neutral-400 transition-colors group"
-          >
-            <h3 className="font-medium text-neutral-900 mb-2 group-hover:text-neutral-600 transition-colors">
-              {t('exploreBirthstones')}
-            </h3>
-            <p className="text-sm text-neutral-500">{t('exploreBirthstonesDesc')}</p>
+        </div>
+        <div className="flex flex-col">
+          <a href={`/${locale}/birthstones`} className="flex items-center gap-3 p-2 hover:bg-[#f1f1ef] rounded transition-colors group">
+            <span className="text-xl p-1 bg-[#e7f3f8] rounded">💎</span>
+            <span className="border-b border-[#e9e9e7] group-hover:border-transparent flex-1 py-1 text-sm font-medium">
+              {isJa ? '誕生石一覧' : 'Birthstones'}
+            </span>
           </a>
-          <a
-            href={`/${locale}/birthflowers`}
-            className="p-6 rounded-lg border border-neutral-200 hover:border-neutral-400 transition-colors group"
-          >
-            <h3 className="font-medium text-neutral-900 mb-2 group-hover:text-neutral-600 transition-colors">
-              {t('exploreBirthflowers')}
-            </h3>
-            <p className="text-sm text-neutral-500">{t('exploreBirthflowersDesc')}</p>
+          <a href={`/${locale}/birthflowers`} className="flex items-center gap-3 p-2 hover:bg-[#f1f1ef] rounded transition-colors group">
+            <span className="text-xl p-1 bg-[#fdebec] rounded">🌸</span>
+            <span className="border-b border-[#e9e9e7] group-hover:border-transparent flex-1 py-1 text-sm font-medium">
+              {isJa ? '誕生花一覧' : 'Birth Flowers'}
+            </span>
           </a>
-          <a
-            href={`/${locale}/birthcolors`}
-            className="p-6 rounded-lg border border-neutral-200 hover:border-neutral-400 transition-colors group"
-          >
-            <h3 className="font-medium text-neutral-900 mb-2 group-hover:text-neutral-600 transition-colors">
-              {t('exploreBirthcolors')}
-            </h3>
-            <p className="text-sm text-neutral-500">{t('exploreBirthcolorsDesc')}</p>
+          <a href={`/${locale}/birthcolors`} className="flex items-center gap-3 p-2 hover:bg-[#f1f1ef] rounded transition-colors group">
+            <span className="text-xl p-1 bg-[#fbf3db] rounded">🎨</span>
+            <span className="border-b border-[#e9e9e7] group-hover:border-transparent flex-1 py-1 text-sm font-medium">
+              {isJa ? '誕生色一覧' : 'Birth Colors'}
+            </span>
           </a>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

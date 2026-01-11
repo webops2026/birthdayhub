@@ -6,8 +6,8 @@ import { routing } from '@/i18n/routing';
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BirthdayHub - あなたの誕生日の、すべてがここに",
-  description: "誕生石・誕生花・誕生色など、誕生日に関する情報を網羅。あなたの特別な日を彩りましょう。",
+  title: "BirthdayHub",
+  description: "Your personal birthday database.",
 };
 
 export function generateStaticParams() {
@@ -29,110 +29,89 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
-  const navItems = locale === 'ja' 
+  // Notion-like navigation items
+  const navItems = locale === 'ja'
     ? [
-        { href: `/${locale}`, label: 'ホーム' },
-        { href: `/${locale}/birthstones`, label: '誕生石' },
-        { href: `/${locale}/birthflowers`, label: '誕生花' },
-        { href: `/${locale}/birthcolors`, label: '誕生色' }
+        { href: `/${locale}/birthstones`, label: 'Birthstones', icon: '💎' },
+        { href: `/${locale}/birthflowers`, label: 'Flowers', icon: '🌸' },
+        { href: `/${locale}/birthcolors`, label: 'Colors', icon: '🎨' }
       ]
     : [
-        { href: `/${locale}`, label: 'Home' },
-        { href: `/${locale}/birthstones`, label: 'Birthstones' },
-        { href: `/${locale}/birthflowers`, label: 'Birth Flowers' },
-        { href: `/${locale}/birthcolors`, label: 'Birth Colors' }
+        { href: `/${locale}/birthstones`, label: 'Birthstones', icon: '💎' },
+        { href: `/${locale}/birthflowers`, label: 'Flowers', icon: '🌸' },
+        { href: `/${locale}/birthcolors`, label: 'Colors', icon: '🎨' }
       ];
 
   return (
     <html lang={locale}>
-      <body className="antialiased bg-white text-neutral-900">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className="font-sans antialiased text-[#37352f] bg-white">
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen flex flex-col">
-            <header className="border-b border-neutral-100">
-              <nav className="max-w-4xl mx-auto px-6 py-4">
-                <div className="flex items-center justify-between">
-                  <a href={`/${locale}`} className="text-lg font-semibold text-neutral-900 hover:text-neutral-600 transition-colors">
-                    BirthdayHub
+            {/* Notion-like Header */}
+            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-[#e9e9e7] h-11 flex items-center px-3">
+              <nav className="w-full flex items-center justify-between max-w-[1200px] mx-auto">
+                <div className="flex items-center gap-2 text-sm">
+                  <a href={`/${locale}`} className="flex items-center gap-2 hover:bg-[#efefef] px-2 py-1 rounded transition-colors text-[#37352f] font-medium">
+                    <span className="text-base">🎂</span>
+                    <span>BirthdayHub</span>
                   </a>
-                  <div className="flex items-center gap-6">
-                    <div className="hidden md:flex gap-1">
-                      {navItems.map((item) => (
-                        <a
-                          key={item.href}
-                          href={item.href}
-                          className="px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded transition-colors"
-                        >
-                          {item.label}
-                        </a>
-                      ))}
-                    </div>
-                    <div className="flex gap-2 text-sm text-neutral-500">
+                  <span className="text-[#9b9a97]">/</span>
+                  <div className="hidden sm:flex items-center gap-1">
+                    {navItems.map((item) => (
                       <a
-                        href="/ja"
-                        className={locale === 'ja' ? 'text-neutral-900 font-medium' : 'hover:text-neutral-900 transition-colors'}
+                        key={item.href}
+                        href={item.href}
+                        className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-[#efefef] text-[#37352f] transition-colors"
                       >
-                        JP
+                        <span className="text-xs">{item.icon}</span>
+                        <span>{item.label}</span>
                       </a>
-                      <span>/</span>
-                      <a
-                        href="/en"
-                        className={locale === 'en' ? 'text-neutral-900 font-medium' : 'hover:text-neutral-900 transition-colors'}
-                      >
-                        EN
-                      </a>
-                    </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm">
+                  <div className="flex bg-[#f7f7f5] rounded p-0.5">
+                    <a
+                      href="/ja"
+                      className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
+                        locale === 'ja'
+                          ? 'bg-white shadow-[0_1px_2px_rgba(0,0,0,0.1)] text-[#37352f]'
+                          : 'text-[#9b9a97] hover:text-[#37352f]'
+                      }`}
+                    >
+                      JP
+                    </a>
+                    <a
+                      href="/en"
+                      className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
+                        locale === 'en'
+                          ? 'bg-white shadow-[0_1px_2px_rgba(0,0,0,0.1)] text-[#37352f]'
+                          : 'text-[#9b9a97] hover:text-[#37352f]'
+                      }`}
+                    >
+                      EN
+                    </a>
                   </div>
                 </div>
               </nav>
             </header>
-            <main className="flex-grow">{children}</main>
-            <footer className="border-t border-neutral-100 mt-20">
-              <div className="max-w-4xl mx-auto px-6 py-12">
-                <div className="flex flex-col md:flex-row justify-between gap-8 mb-8">
-                  <div>
-                    <p className="font-semibold text-neutral-900 mb-2">BirthdayHub</p>
-                    <p className="text-sm text-neutral-500 max-w-xs">
-                      {locale === 'ja' 
-                        ? '誕生日に関する情報を網羅したポータルサイト' 
-                        : 'A comprehensive portal for birthday information'}
-                    </p>
-                  </div>
-                  <div className="flex gap-12">
-                    <div>
-                      <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-3">
-                        {locale === 'ja' ? 'メニュー' : 'Menu'}
-                      </p>
-                      <div className="space-y-2">
-                        {navItems.map((item) => (
-                          <a
-                            key={item.href}
-                            href={item.href}
-                            className="block text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
-                          >
-                            {item.label}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-3">
-                        {locale === 'ja' ? '言語' : 'Language'}
-                      </p>
-                      <div className="space-y-2">
-                        <a href="/ja" className="block text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                          日本語
-                        </a>
-                        <a href="/en" className="block text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                          English
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="pt-8 border-t border-neutral-100">
-                  <p className="text-xs text-neutral-400">
-                    © {new Date().getFullYear()} BirthdayHub
-                  </p>
+
+            <main className="flex-grow w-full max-w-[960px] mx-auto px-4 sm:px-24 py-12 md:py-20">
+              {children}
+            </main>
+
+            <footer className="border-t border-[#e9e9e7] mt-auto">
+              <div className="max-w-[960px] mx-auto px-4 sm:px-24 py-8 flex justify-between items-center text-xs text-[#9b9a97]">
+                <p>© 2026 BirthdayHub</p>
+                <div className="flex gap-4">
+                  <a href="#" className="hover:underline">Privacy</a>
+                  <a href="#" className="hover:underline">Terms</a>
                 </div>
               </div>
             </footer>
