@@ -162,6 +162,40 @@ function calculateAge(birthYear: number, birthMonth: number, birthDay: number): 
   return { age, days, nextBirthday, daysUntilBirthday, dayOfWeek, dayOfWeekJa: dayOfWeekJp };
 }
 
+// 学歴年表計算（日本の学制）
+function calculateEducation(birthYear: number, birthMonth: number, birthDay: number): {
+  elementarySchoolEnter: number;
+  elementarySchoolGraduate: number;
+  juniorHighSchoolEnter: number;
+  juniorHighSchoolGraduate: number;
+  highSchoolEnter: number;
+  highSchoolGraduate: number;
+  universityEnter: number;
+  universityGraduate: number;
+} {
+  // 4月1日以前生まれは早生まれとして前年度扱い
+  // 4月2日〜翌年4月1日生まれが同じ学年
+  let schoolYear = birthYear;
+  if (birthMonth >= 4 && birthMonth <= 12) {
+    // 4月〜12月生まれ: 生まれた年+7年の4月に小学校入学
+    schoolYear = birthYear + 7;
+  } else {
+    // 1月〜3月生まれ（早生まれ）: 生まれた年+6年の4月に小学校入学
+    schoolYear = birthYear + 6;
+  }
+
+  return {
+    elementarySchoolEnter: schoolYear,           // 小学校入学
+    elementarySchoolGraduate: schoolYear + 6,    // 小学校卒業
+    juniorHighSchoolEnter: schoolYear + 6,       // 中学校入学
+    juniorHighSchoolGraduate: schoolYear + 9,    // 中学校卒業
+    highSchoolEnter: schoolYear + 9,             // 高校入学
+    highSchoolGraduate: schoolYear + 12,         // 高校卒業
+    universityEnter: schoolYear + 12,            // 大学入学
+    universityGraduate: schoolYear + 16,         // 大学卒業（4年制）
+  };
+}
+
 // 世界の誕生日文化データ
 const WORLD_BIRTHDAY_TRADITIONS = [
   { country_ja: '🇯🇵 日本', country_en: 'Japan', tradition_ja: 'ケーキと誕生日ソング', tradition_en: 'Birthday cake and song' },
@@ -194,6 +228,7 @@ export default function HomePage() {
 
   // 誕生日に基づくデータ計算
   const ageData = calculateAge(year, month, day);
+  const educationData = calculateEducation(year, month, day);
   const todayBirthstone = BIRTHSTONES[currentMonth];
   const todayFlower = SAMPLE_FLOWERS[currentMonth];
   const todayColor = SAMPLE_COLORS[currentMonth];
@@ -644,6 +679,56 @@ export default function HomePage() {
               </div>
               <p className="text-xs text-stone-400 mt-4">※本厄の年齢</p>
             </div>
+
+            {/* Education Timeline - Wide (日本語のみ) */}
+            {isJa && (
+              <div className="col-span-12 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+                <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-6">
+                  🎓 学歴年表
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50">
+                    <p className="text-xs text-stone-500 mb-2">小学校</p>
+                    <p className="text-sm font-semibold text-stone-700 mb-1">
+                      入学: {educationData.elementarySchoolEnter}年
+                    </p>
+                    <p className="text-sm font-semibold text-stone-700">
+                      卒業: {educationData.elementarySchoolGraduate}年
+                    </p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50">
+                    <p className="text-xs text-stone-500 mb-2">中学校</p>
+                    <p className="text-sm font-semibold text-stone-700 mb-1">
+                      入学: {educationData.juniorHighSchoolEnter}年
+                    </p>
+                    <p className="text-sm font-semibold text-stone-700">
+                      卒業: {educationData.juniorHighSchoolGraduate}年
+                    </p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-50 to-amber-50">
+                    <p className="text-xs text-stone-500 mb-2">高校</p>
+                    <p className="text-sm font-semibold text-stone-700 mb-1">
+                      入学: {educationData.highSchoolEnter}年
+                    </p>
+                    <p className="text-sm font-semibold text-stone-700">
+                      卒業: {educationData.highSchoolGraduate}年
+                    </p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50">
+                    <p className="text-xs text-stone-500 mb-2">大学（4年制）</p>
+                    <p className="text-sm font-semibold text-stone-700 mb-1">
+                      入学: {educationData.universityEnter}年
+                    </p>
+                    <p className="text-sm font-semibold text-stone-700">
+                      卒業: {educationData.universityGraduate}年
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-stone-400 mt-4 text-center">
+                  ※4月2日〜翌年4月1日生まれが同学年です（早生まれ対応済み）
+                </p>
+              </div>
+            )}
 
             {/* World Birthday Traditions - Wide */}
             <div className="col-span-12 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
