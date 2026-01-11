@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
-/* Typography - Inter for Latin, Noto Sans JP for Japanese */
+/* Modern Luxury Theme - 2026 */
+
+/* Fonts */
 body {
   font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -13,16 +14,35 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Selection - Subtle */
+/* Selection - Neutral */
 ::selection {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(41, 37, 36, 0.1);
   color: inherit;
 }
 
 /* Focus styles - Minimal */
 *:focus-visible {
-  outline: 2px solid rgba(0, 0, 0, 0.2);
+  outline: 2px solid rgba(28, 25, 23, 0.3);
   outline-offset: 2px;
+}
+
+/* Custom scrollbar - Luxury */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAFAF9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D6D3D1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A8A29E;
 }
 
 /* Remove tap highlight on mobile */
@@ -30,46 +50,24 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Custom scrollbar - Subtle like Apple */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-/* Transitions - Smooth like Stripe */
-a, button {
-  transition: all 0.2s ease;
-}
-
-/* Letter spacing for headings */
+/* Typography - Modern Hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  font-weight: 700;
 }
 
-/* Subtle animations */
+/* Card hover effect - Subtle */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* Animations - Smooth & Elegant */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slide-up {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -80,10 +78,60 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out;
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.animate-slide-up {
-  animation: slide-up 0.6s ease-out;
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
 }
+
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Time element styling */
+time {
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+}
+
+/* Utility: Tracking wider for uppercase */
+.tracking-widest {
+  letter-spacing: 0.15em;
+}
+
+/* Smooth transitions on interactive elements */
+button, a, select {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Remove default select styling */
+select {
+  appearance: none;
+  background-image: none;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+

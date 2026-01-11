@@ -31,14 +31,16 @@ export default async function LocaleLayout({
 
   const navItems = locale === 'ja' 
     ? [
+        { href: `/${locale}`, label: 'ホーム' },
         { href: `/${locale}/birthstones`, label: '誕生石' },
         { href: `/${locale}/birthflowers`, label: '誕生花' },
         { href: `/${locale}/birthcolors`, label: '誕生色' }
       ]
     : [
-        { href: `/${locale}/birthstones`, label: 'Stones' },
-        { href: `/${locale}/birthflowers`, label: 'Flowers' },
-        { href: `/${locale}/birthcolors`, label: 'Colors' }
+        { href: `/${locale}`, label: 'Home' },
+        { href: `/${locale}/birthstones`, label: 'Birthstones' },
+        { href: `/${locale}/birthflowers`, label: 'Birth Flowers' },
+        { href: `/${locale}/birthcolors`, label: 'Birth Colors' }
       ];
 
   return (
@@ -46,50 +48,57 @@ export default async function LocaleLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="antialiased">
+      <body className="font-sans antialiased bg-stone-50 text-stone-900">
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen flex flex-col">
-            
-            {/* Header - Minimal like Apple/Stripe */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
-              <nav className="max-w-6xl mx-auto px-6">
-                <div className="flex items-center justify-between h-16">
+            {/* Header */}
+            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-stone-200">
+              <nav className="max-w-7xl mx-auto px-6 py-5">
+                <div className="flex items-center justify-between">
                   {/* Logo */}
-                  <a href={`/${locale}`} className="text-lg font-semibold text-gray-900 tracking-tight">
-                    BirthdayHub
+                  <a href={`/${locale}`} className="flex items-center gap-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-stone-900 flex items-center justify-center">
+                      <span className="text-white text-lg">🎂</span>
+                    </div>
+                    <span className="text-xl font-bold text-stone-900 tracking-tight">
+                      BirthdayHub
+                    </span>
                   </a>
 
                   {/* Navigation */}
                   <div className="flex items-center gap-8">
-                    <div className="hidden md:flex items-center gap-8">
+                    <div className="hidden md:flex items-center gap-2">
                       {navItems.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
-                          className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                          className="px-4 py-2 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-50 text-sm font-medium transition-all"
                         >
                           {item.label}
                         </a>
                       ))}
                     </div>
 
-                    {/* Language */}
-                    <div className="flex items-center gap-1 text-sm">
+                    {/* Language Switcher */}
+                    <div className="flex items-center border-l border-stone-200 pl-6">
                       <a
                         href="/ja"
-                        className={`px-2 py-1 rounded transition-colors ${
-                          locale === 'ja' ? 'text-gray-900 font-medium' : 'text-gray-400 hover:text-gray-600'
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                          locale === 'ja'
+                            ? 'bg-stone-900 text-white'
+                            : 'text-stone-500 hover:text-stone-900 hover:bg-stone-50'
                         }`}
                       >
-                        JP
+                        JA
                       </a>
-                      <span className="text-gray-300">/</span>
                       <a
                         href="/en"
-                        className={`px-2 py-1 rounded transition-colors ${
-                          locale === 'en' ? 'text-gray-900 font-medium' : 'text-gray-400 hover:text-gray-600'
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                          locale === 'en'
+                            ? 'bg-stone-900 text-white'
+                            : 'text-stone-500 hover:text-stone-900 hover:bg-stone-50'
                         }`}
                       >
                         EN
@@ -101,44 +110,67 @@ export default async function LocaleLayout({
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 pt-16">{children}</main>
+            <main className="flex-1">{children}</main>
 
-            {/* Footer - Minimal like MUJI/Kinfolk */}
-            <footer className="border-t border-gray-100">
-              <div className="max-w-6xl mx-auto px-6 py-16">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+            {/* Footer */}
+            <footer className="bg-stone-900 text-stone-200 mt-20 py-16">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="grid md:grid-cols-4 gap-12 mb-12">
                   {/* Brand */}
-                  <div>
-                    <p className="text-lg font-semibold text-gray-900 mb-2">BirthdayHub</p>
-                    <p className="text-sm text-gray-400">
+                  <div className="md:col-span-2">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
+                        <span className="text-lg">🎂</span>
+                      </div>
+                      <span className="text-lg font-bold text-white tracking-tight">BirthdayHub</span>
+                    </div>
+                    <p className="text-stone-400 text-sm max-w-md leading-relaxed">
                       {locale === 'ja' 
                         ? 'あなたの誕生日の、すべてがここに。'
-                        : 'Everything about your birthday.'}
+                        : 'Everything about your birthday, all in one place.'
+                      }
                     </p>
                   </div>
 
-                  {/* Links */}
-                  <div className="flex gap-8 text-sm">
-                    {navItems.map((item) => (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        className="text-gray-400 hover:text-gray-900 transition-colors"
-                      >
-                        {item.label}
+                  {/* Quick Links */}
+                  <div>
+                    <h4 className="text-sm font-semibold text-white mb-4 tracking-wide">
+                      {locale === 'ja' ? 'メニュー' : 'Menu'}
+                    </h4>
+                    <div className="space-y-3">
+                      {navItems.map((item) => (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          className="block text-sm text-stone-400 hover:text-white transition-colors"
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Language */}
+                  <div>
+                    <h4 className="text-sm font-semibold text-white mb-4 tracking-wide">
+                      {locale === 'ja' ? '言語' : 'Language'}
+                    </h4>
+                    <div className="space-y-3">
+                      <a href="/ja" className="block text-sm text-stone-400 hover:text-white transition-colors">
+                        日本語
                       </a>
-                    ))}
+                      <a href="/en" className="block text-sm text-stone-400 hover:text-white transition-colors">
+                        English
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                  <p className="text-xs text-gray-400">
-                    © {new Date().getFullYear()} BirthdayHub
+                {/* Bottom bar */}
+                <div className="pt-8 border-t border-stone-800 text-center">
+                  <p className="text-sm text-stone-500">
+                    © {new Date().getFullYear()} BirthdayHub. All rights reserved.
                   </p>
-                  <div className="flex gap-6 text-xs text-gray-400">
-                    <a href="#" className="hover:text-gray-600 transition-colors">Privacy</a>
-                    <a href="#" className="hover:text-gray-600 transition-colors">Terms</a>
-                  </div>
                 </div>
               </div>
             </footer>
