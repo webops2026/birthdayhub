@@ -188,6 +188,9 @@ export default function HomePage() {
   const [month, setMonth] = useState(currentMonth);
   const [day, setDay] = useState(currentDay);
   const [isLoading, setIsLoading] = useState(true);
+  const [useWareki, setUseWareki] = useState(false); // 和暦モード切替
+  const [selectedEra, setSelectedEra] = useState('令和'); // 選択された元号
+  const [eraYear, setEraYear] = useState(6); // 和暦の年
 
   // 誕生日に基づくデータ計算
   const ageData = calculateAge(year, month, day);
@@ -207,6 +210,49 @@ export default function HomePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     router.push(`/${locale}/birthday/${year}/${month}/${day}`);
+  };
+
+  // 和暦→西暦変換
+  const warekiToSeireki = (era: string, eraYear: number): number => {
+    const eraStarts: { [key: string]: number } = {
+      '令和': 2019,
+      '平成': 1989,
+      '昭和': 1926,
+      '大正': 1912,
+      '明治': 1868,
+    };
+    return eraStarts[era] + eraYear - 1;
+  };
+
+  // 西暦→和暦変換
+  const seirekiToWareki = (year: number): { era: string; eraYear: number } => {
+    if (year >= 2019) return { era: '令和', eraYear: year - 2018 };
+    if (year >= 1989) return { era: '平成', eraYear: year - 1988 };
+    if (year >= 1926) return { era: '昭和', eraYear: year - 1925 };
+    if (year >= 1912) return { era: '大正', eraYear: year - 1911 };
+    return { era: '明治', eraYear: year - 1867 };
+  };
+
+  // 和暦の年変更時に西暦を更新
+  const handleEraYearChange = (newEraYear: number) => {
+    setEraYear(newEraYear);
+    const newYear = warekiToSeireki(selectedEra, newEraYear);
+    setYear(newYear);
+  };
+
+  // 元号変更時に西暦を更新
+  const handleEraChange = (newEra: string) => {
+    setSelectedEra(newEra);
+    const newYear = warekiToSeireki(newEra, eraYear);
+    setYear(newYear);
+  };
+
+  // 西暦変更時に和暦を更新
+  const handleYearChange = (newYear: number) => {
+    setYear(newYear);
+    const wareki = seirekiToWareki(newYear);
+    setSelectedEra(wareki.era);
+    setEraYear(wareki.eraYear);
   };
 
   const isJa = locale === 'ja';
@@ -250,41 +296,118 @@ export default function HomePage() {
 
           {/* Birthday Input Form */}
           <form onSubmit={handleSubmit} className="max-w-2xl mx-auto mb-16">
+            {/* 日本語ページの場合、西暦/和暦切替ボタン */}
+            {isJa && (
+              <div className="flex justify-center gap-2 mb-4">
+                <button
+                  type="button"
+                  onClick={() => setUseWareki(false)}
+                  className={`px-6 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    !useWareki
+                      ? 'bg-stone-900 text-white'
+                      : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                  }`}
+                >
+                  西暦
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUseWareki(true)}
+                  className={`px-6 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    useWareki
+                      ? 'bg-stone-900 text-white'
+                      : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                  }`}
+                >
+                  和暦
+                </button>
+              </div>
+            )}
+
             <div className="bg-white rounded-2xl p-2 shadow-sm border border-stone-200 flex items-center gap-2">
-              <select
-                value={year}
-                onChange={(e) => setYear(Number(e.target.value))}
-                className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
-              >
-                {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
-              <span className="text-stone-400">/</span>
-              <select
-                value={month}
-                onChange={(e) => setMonth(Number(e.target.value))}
-                className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
-              >
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-              <span className="text-stone-400">/</span>
-              <select
-                value={day}
-                onChange={(e) => setDay(Number(e.target.value))}
-                className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
-              >
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
+              {isJa && useWareki ? (
+                // 和暦入力
+                <>
+                  <select
+                    value={selectedEra}
+                    onChange={(e) => handleEraChange(e.target.value)}
+                    className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
+                  >
+                    <option value="令和">令和</option>
+                    <option value="平成">平成</option>
+                    <option value="昭和">昭和</option>
+                    <option value="大正">大正</option>
+                    <option value="明治">明治</option>
+                  </select>
+                  <select
+                    value={eraYear}
+                    onChange={(e) => handleEraYearChange(Number(e.target.value))}
+                    className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
+                  >
+                    {Array.from({ length: 65 }, (_, i) => i + 1).map((y) => (
+                      <option key={y} value={y}>{y}年</option>
+                    ))}
+                  </select>
+                  <span className="text-stone-400">/</span>
+                  <select
+                    value={month}
+                    onChange={(e) => setMonth(Number(e.target.value))}
+                    className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                      <option key={m} value={m}>{m}月</option>
+                    ))}
+                  </select>
+                  <span className="text-stone-400">/</span>
+                  <select
+                    value={day}
+                    onChange={(e) => setDay(Number(e.target.value))}
+                    className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
+                  >
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+                      <option key={d} value={d}>{d}日</option>
+                    ))}
+                  </select>
+                </>
+              ) : (
+                // 西暦入力
+                <>
+                  <select
+                    value={year}
+                    onChange={(e) => handleYearChange(Number(e.target.value))}
+                    className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
+                  >
+                    {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
+                      <option key={y} value={y}>{y}</option>
+                    ))}
+                  </select>
+                  <span className="text-stone-400">/</span>
+                  <select
+                    value={month}
+                    onChange={(e) => setMonth(Number(e.target.value))}
+                    className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select>
+                  <span className="text-stone-400">/</span>
+                  <select
+                    value={day}
+                    onChange={(e) => setDay(Number(e.target.value))}
+                    className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
+                  >
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </>
+              )}
               <button
                 type="submit"
                 className="px-8 py-3 bg-stone-900 text-white font-medium text-sm rounded-xl hover:bg-stone-800 transition-colors"
               >
-                検索
+                {isJa ? '検索' : 'Search'}
               </button>
             </div>
           </form>
