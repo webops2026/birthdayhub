@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BirthdayHub（バースデーハブ）
 
-## Getting Started
+**誕生日 × あなたの文化** - 誕生日に関する全ての情報を1つに集約したモダンWebサービス
 
-First, run the development server:
+## 📋 概要
+
+BirthdayHubは、誕生石・誕生花・誕生色などのグローバル共通情報に加え、日本版では和暦・厄年・六曜、英語版ではLife Path Number・Moon Signなど、その国の文化に根ざした情報を主役として提供する誕生日ポータルサービスです。
+
+## ✨ 主な機能
+
+### Layer 1: グローバル共通機能
+- 💎 誕生石（12ヶ月 + 365日）
+- 🌸 誕生花（365日）
+- 🎨 誕生色（366日）
+- 🎂 年齢計算・早見表
+- ⭐ 西洋占星術（12星座）
+- 🐉 中国干支（12支）
+
+### Layer 2: 🇯🇵 日本版ローカル機能
+- 📅 和暦変換（明治・大正・昭和・平成・令和）
+- 🙏 厄年計算（男女別、本厄・前厄・後厄）
+- 🌙 六曜（大安・仏滅・先勝・友引・先負・赤口）
+- 🌾 二十四節気（立春・夏至・秋分等）
+- 🏯 干支（十干十二支の組み合わせ60種）
+- 🎏 旧暦の誕生日計算
+
+### Layer 3: 🇺🇸🇬🇧 英語版ローカル機能
+- 🔮 Life Path Number（数秘術）
+- 🌙 Moon Sign Calculator（月星座）
+- ⭐ Rising Sign / Ascendant（上昇星座）
+- 🌟 Numerology Chart（数秘術チャート）
+- 💐 Victorian Flower Language（ビクトリア朝の花言葉）
+- 🍀 Birth Week Stone（週単位の誕生石）
+
+## 🛠 技術スタック
+
+- **フレームワーク**: Next.js 15 (App Router)
+- **スタイリング**: Tailwind CSS + shadcn/ui
+- **多言語対応**: next-intl
+- **データベース**: Supabase (PostgreSQL)
+- **OGP画像生成**: @vercel/og
+- **ホスティング**: Vercel
+- **広告**: Google AdSense
+- **分析**: Google Analytics 4
+
+## 🚀 セットアップ
+
+### 前提条件
+- Node.js 18以上
+- npm または yarn
+- Supabaseアカウント
+
+### インストール
 
 ```bash
+# 依存関係をインストール
+npm install
+
+# 環境変数を設定
+cp .env.local.example .env.local
+# .env.localにSupabaseの認証情報を設定
+
+# 開発サーバーを起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Supabaseセットアップ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Supabaseプロジェクトを作成
+2. `supabase/schema.sql`を実行してデータベーススキーマを作成
+3. `.env.local`に以下を設定:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-## Learn More
+## 📁 プロジェクト構造
 
-To learn more about Next.js, take a look at the following resources:
+```
+birthdayhub/
+├── app/
+│   └── [locale]/              # 多言語対応ルーティング
+│       ├── layout.tsx
+│       ├── page.tsx           # ホームページ
+│       ├── birthday/          # 誕生日詳細ページ
+│       ├── birthstones/       # 誕生石ページ
+│       ├── birthflowers/      # 誕生花ページ
+│       ├── birthcolors/       # 誕生色ページ
+│       ├── wareki/            # 和暦変換ページ
+│       └── yakudoshi/         # 厄年計算ページ
+├── components/                # Reactコンポーネント
+│   └── ui/                    # shadcn/uiコンポーネント
+├── lib/
+│   ├── supabase.ts            # Supabaseクライアント
+│   ├── birthday-utils.ts      # 誕生日計算ユーティリティ
+│   └── utils.ts               # 共通ユーティリティ
+├── i18n/
+│   ├── request.ts             # next-intl設定
+│   └── routing.ts             # ルーティング設定
+├── messages/
+│   ├── ja.json                # 日本語翻訳
+│   └── en.json                # 英語翻訳
+├── supabase/
+│   └── schema.sql             # データベーススキーマ
+└── public/                    # 静的ファイル
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 対応言語
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 🇯🇵 日本語（デフォルト）
+- 🇬🇧 英語
 
-## Deploy on Vercel
+将来的には以下の言語も対応予定:
+- 🇨🇳 中国語
+- 🇮🇳 ヒンディー語
+- 🇪🇸 スペイン語
+- 🇸🇦 アラビア語
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📊 収益モデル
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Google AdSense
+- ジュエリーアフィリエイト（誕生石）
+- 花の通販アフィリエイト（誕生花）
+- ギフトアフィリエイト
+
+## 🔒 セキュリティ
+
+- Row Level Security (RLS)による適切なアクセス制御
+- 匿名ユーザーのコメント投稿に対するスパム対策
+- NGワードフィルタによる不適切投稿のブロック
+
+## 📈 目標KPI（3年目）
+
+- 月間PV: 180万
+- 月間ユニークユーザー: 60万
+- 月間収益: 121万円
+
+## 📄 ライセンス
+
+© 2026 BirthdayHub. All rights reserved.

@@ -1,0 +1,86 @@
+{
+  "common": {
+    "siteName": "BirthdayHub",
+    "siteDescription": "Everything about your birthday, in one place.",
+    "home": "Home",
+    "birthstones": "Birthstones",
+    "birthflowers": "Birth Flowers",
+    "birthcolors": "Birth Colors",
+    "ageCalculator": "Age Calculator",
+    "wareki": "Japanese Calendar",
+    "yakudoshi": "Yakudoshi (Unlucky Years)",
+    "search": "Search",
+    "year": "Year",
+    "month": "Month",
+    "day": "Day",
+    "calculate": "Calculate"
+  },
+  "home": {
+    "title": "Everything about your birthday, in one place.",
+    "subtitle": "Birthstones, birth flowers, birth colors, and more",
+    "enterBirthday": "Enter your birthday",
+    "popularSearches": "Popular Searches",
+    "exploreBirthstones": "Explore Birthstones",
+    "exploreBirthstonesDesc": "View gems for each month",
+    "exploreBirthflowers": "Explore Birth Flowers",
+    "exploreBirthflowersDesc": "View flowers for each day",
+    "exploreBirthcolors": "Explore Birth Colors",
+    "exploreBirthcolorsDesc": "View colors for each day"
+  },
+  "birthday": {
+    "title": "Born on {month} {day}, {year}",
+    "globalInfo": "Global Information",
+    "japaneseInfo": "Japanese Culture",
+    "westernInfo": "Western Mysticism",
+    "age": "Age",
+    "birthstone": "Birthstone",
+    "birthflower": "Birth Flower",
+    "birthcolor": "Birth Color",
+    "zodiac": "Zodiac Sign",
+    "chineseZodiac": "Chinese Zodiac",
+    "meaning": "Meaning",
+    "flowerLanguage": "Flower Language",
+    "wareki": "Japanese Calendar",
+    "yakudoshi": "Yakudoshi",
+    "rokuyo": "Rokuyo",
+    "sekki": "24 Solar Terms",
+    "kanshi": "Kanshi (60-year cycle)",
+    "oldCalendar": "Lunar Calendar"
+  },
+  "birthstones": {
+    "title": "Birthstones",
+    "description": "Birthstones for each month and their meanings",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "birthflowers": {
+    "title": "Birth Flowers",
+    "description": "Birth flowers for each day and their meanings"
+  },
+  "birthcolors": {
+    "title": "Birth Colors",
+    "description": "Birth colors for each day and their meanings"
+  },
+  "ageCalculator": {
+    "title": "Age Calculator",
+    "description": "Calculate your age from your birthday"
+  },
+  "wareki": {
+    "title": "Japanese Calendar Converter",
+    "description": "Convert Western calendar to Japanese era names"
+  },
+  "yakudoshi": {
+    "title": "Yakudoshi Calculator",
+    "description": "Calculate unlucky years based on Japanese tradition"
+  }
+}

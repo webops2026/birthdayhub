@@ -1,0 +1,86 @@
+{
+  "common": {
+    "siteName": "BirthdayHub",
+    "siteDescription": "あなたの誕生日の、すべてがここに。",
+    "home": "ホーム",
+    "birthstones": "誕生石",
+    "birthflowers": "誕生花",
+    "birthcolors": "誕生色",
+    "ageCalculator": "年齢計算",
+    "wareki": "和暦変換",
+    "yakudoshi": "厄年計算",
+    "search": "検索",
+    "year": "年",
+    "month": "月",
+    "day": "日",
+    "calculate": "調べる"
+  },
+  "home": {
+    "title": "あなたの誕生日の、すべてがここに。",
+    "subtitle": "誕生石・誕生花・誕生色・和暦・厄年など、誕生日に関する情報を網羅",
+    "enterBirthday": "誕生日を入力してください",
+    "popularSearches": "人気の検索",
+    "exploreBirthstones": "誕生石を探す",
+    "exploreBirthstonesDesc": "1月〜12月の宝石を見る",
+    "exploreBirthflowers": "誕生花を探す",
+    "exploreBirthflowersDesc": "365日の花を見る",
+    "exploreBirthcolors": "誕生色を探す",
+    "exploreBirthcolorsDesc": "366日の色を見る"
+  },
+  "birthday": {
+    "title": "{year}年{month}月{day}日生まれのあなた",
+    "globalInfo": "グローバル共通情報",
+    "japaneseInfo": "日本の文化情報",
+    "westernInfo": "西洋の文化情報",
+    "age": "今年の年齢",
+    "birthstone": "誕生石",
+    "birthflower": "誕生花",
+    "birthcolor": "誕生色",
+    "zodiac": "星座",
+    "chineseZodiac": "干支",
+    "meaning": "意味",
+    "flowerLanguage": "花言葉",
+    "wareki": "和暦",
+    "yakudoshi": "厄年情報",
+    "rokuyo": "誕生日の六曜",
+    "sekki": "二十四節気",
+    "kanshi": "干支（60種）",
+    "oldCalendar": "旧暦"
+  },
+  "birthstones": {
+    "title": "誕生石一覧",
+    "description": "1月から12月までの誕生石とその意味",
+    "january": "1月",
+    "february": "2月",
+    "march": "3月",
+    "april": "4月",
+    "may": "5月",
+    "june": "6月",
+    "july": "7月",
+    "august": "8月",
+    "september": "9月",
+    "october": "10月",
+    "november": "11月",
+    "december": "12月"
+  },
+  "birthflowers": {
+    "title": "誕生花一覧",
+    "description": "365日の誕生花とその花言葉"
+  },
+  "birthcolors": {
+    "title": "誕生色一覧",
+    "description": "366日の誕生色とその意味"
+  },
+  "ageCalculator": {
+    "title": "年齢計算・早見表",
+    "description": "誕生日から年齢を計算します"
+  },
+  "wareki": {
+    "title": "和暦西暦変換",
+    "description": "西暦を和暦に変換します（明治・大正・昭和・平成・令和）"
+  },
+  "yakudoshi": {
+    "title": "厄年計算",
+    "description": "誕生日から厄年を計算します（男女別、本厄・前厄・後厄）"
+  }
+}
