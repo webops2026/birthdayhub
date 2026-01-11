@@ -6,8 +6,8 @@ import { routing } from '@/i18n/routing';
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BirthdayHub - あなたの誕生日の、すべてがここに",
-  description: "誕生石・誕生花・誕生色・和暦・厄年など、誕生日に関する情報を網羅したポータルサイト",
+  title: "BirthdayHub - Discover Your Birthday's Hidden Meaning",
+  description: "Explore birthstones, birth flowers, and birthday colors. Discover the unique meaning behind your special day.",
 };
 
 export function generateStaticParams() {
@@ -44,98 +44,137 @@ export default async function LocaleLayout({
       ];
 
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} className="dark">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className="font-outfit antialiased">
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen bg-gradient-to-b from-pink-50 via-purple-50 to-rose-50">
-            <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-pink-100">
-              <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="min-h-screen bg-[#0a0a0f] text-white">
+            {/* Header */}
+            <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5">
+              <nav className="max-w-7xl mx-auto px-6 py-4">
                 <div className="flex items-center justify-between">
-                  <a href={`/${locale}`} className="flex items-center gap-2 group">
-                    <span className="text-3xl group-hover:scale-110 transition-transform">🎂</span>
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  {/* Logo */}
+                  <a href={`/${locale}`} className="flex items-center gap-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <span className="text-xl">💎</span>
+                    </div>
+                    <span className="text-xl font-bold tracking-tight">
                       BirthdayHub
-                    </h1>
+                    </span>
                   </a>
-                  <div className="flex items-center gap-6">
-                    <div className="hidden md:flex gap-6">
+
+                  {/* Navigation */}
+                  <div className="flex items-center gap-8">
+                    <div className="hidden md:flex items-center gap-1">
                       {navItems.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
-                          className="text-gray-700 hover:text-pink-600 font-medium transition-colors relative group"
+                          className="px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-all"
                         >
                           {item.label}
-                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 group-hover:w-full transition-all duration-300" />
                         </a>
                       ))}
                     </div>
-                    <div className="flex gap-2 items-center border-l border-gray-200 pl-6">
+
+                    {/* Language Switcher */}
+                    <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
                       <a
                         href="/ja"
-                        className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+                        className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                           locale === 'ja'
-                            ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-white/10 text-white'
+                            : 'text-white/50 hover:text-white'
                         }`}
                       >
-                        🇯🇵 日本語
+                        JA
                       </a>
                       <a
                         href="/en"
-                        className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+                        className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                           locale === 'en'
-                            ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-white/10 text-white'
+                            : 'text-white/50 hover:text-white'
                         }`}
                       >
-                        🇬🇧 English
+                        EN
                       </a>
                     </div>
                   </div>
                 </div>
               </nav>
             </header>
-            <main>{children}</main>
-            <footer className="bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 text-white mt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid md:grid-cols-3 gap-8 mb-8">
-                  <div>
-                    <h3 className="text-xl font-bold mb-4">🎂 BirthdayHub</h3>
-                    <p className="text-white/80">
-                      Discover the meaning and magic behind your special day.
+
+            {/* Main Content - with padding for fixed header */}
+            <main className="pt-16">{children}</main>
+
+            {/* Footer */}
+            <footer className="border-t border-white/5 bg-[#050508]">
+              <div className="max-w-7xl mx-auto px-6 py-16">
+                <div className="grid md:grid-cols-4 gap-12 mb-12">
+                  {/* Brand */}
+                  <div className="md:col-span-2">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                        <span className="text-xl">💎</span>
+                      </div>
+                      <span className="text-xl font-bold">BirthdayHub</span>
+                    </div>
+                    <p className="text-white/40 max-w-md leading-relaxed">
+                      {locale === 'ja' 
+                        ? '誕生石・誕生花・誕生色であなたの特別な日の意味を発見しましょう。'
+                        : 'Discover the unique meaning behind your special day through birthstones, flowers, and colors.'
+                      }
                     </p>
                   </div>
+
+                  {/* Quick Links */}
                   <div>
-                    <h4 className="font-semibold mb-4">Quick Links</h4>
-                    <div className="space-y-2">
+                    <h4 className="text-white/80 font-semibold mb-4 uppercase tracking-wider text-sm">
+                      {locale === 'ja' ? 'リンク' : 'Links'}
+                    </h4>
+                    <div className="space-y-3">
                       {navItems.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
-                          className="block text-white/80 hover:text-white transition-colors"
+                          className="block text-white/40 hover:text-white transition-colors"
                         >
                           {item.label}
                         </a>
                       ))}
                     </div>
                   </div>
+
+                  {/* Language */}
                   <div>
-                    <h4 className="font-semibold mb-4">Language</h4>
-                    <div className="space-y-2">
-                      <a href="/ja" className="block text-white/80 hover:text-white transition-colors">
-                        🇯🇵 日本語
+                    <h4 className="text-white/80 font-semibold mb-4 uppercase tracking-wider text-sm">
+                      {locale === 'ja' ? '言語' : 'Language'}
+                    </h4>
+                    <div className="space-y-3">
+                      <a href="/ja" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors">
+                        <span>🇯🇵</span> 日本語
                       </a>
-                      <a href="/en" className="block text-white/80 hover:text-white transition-colors">
-                        🇬🇧 English
+                      <a href="/en" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors">
+                        <span>🇬🇧</span> English
                       </a>
                     </div>
                   </div>
                 </div>
-                <div className="border-t border-white/20 pt-8 text-center">
-                  <p className="text-white/60 text-sm">
+
+                {/* Bottom bar */}
+                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+                  <p className="text-white/30 text-sm">
                     © {new Date().getFullYear()} BirthdayHub. All rights reserved.
                   </p>
+                  <div className="flex items-center gap-6 text-white/30 text-sm">
+                    <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                  </div>
                 </div>
               </div>
             </footer>
