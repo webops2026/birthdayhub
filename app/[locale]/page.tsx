@@ -120,6 +120,58 @@ function getZodiacSign(month: number, day: number): keyof typeof ZODIAC_SIGNS {
   return 'sagittarius';
 }
 
+// 年齢計算関数
+function calculateAge(birthYear: number, birthMonth: number, birthDay: number): {
+  age: number;
+  days: number;
+  nextBirthday: Date;
+  daysUntilBirthday: number;
+  dayOfWeek: string;
+  dayOfWeekJa: string;
+} {
+  const today = new Date();
+  const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+  
+  // 年齢計算
+  let age = today.getFullYear() - birthYear;
+  if (today.getMonth() + 1 < birthMonth || 
+      (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) {
+    age--;
+  }
+  
+  // 生存日数
+  const diffTime = Math.abs(today.getTime() - birthDate.getTime());
+  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  // 次の誕生日
+  let nextBirthday = new Date(today.getFullYear(), birthMonth - 1, birthDay);
+  if (nextBirthday < today) {
+    nextBirthday = new Date(today.getFullYear() + 1, birthMonth - 1, birthDay);
+  }
+  
+  // 次の誕生日まで
+  const diffUntil = nextBirthday.getTime() - today.getTime();
+  const daysUntilBirthday = Math.ceil(diffUntil / (1000 * 60 * 60 * 24));
+  
+  // 誕生日の曜日
+  const dayOfWeekEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayOfWeekJa = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
+  const dayOfWeek = dayOfWeekEn[birthDate.getDay()];
+  const dayOfWeekJp = dayOfWeekJa[birthDate.getDay()];
+  
+  return { age, days, nextBirthday, daysUntilBirthday, dayOfWeek, dayOfWeekJa: dayOfWeekJp };
+}
+
+// 世界の誕生日文化データ
+const WORLD_BIRTHDAY_TRADITIONS = [
+  { country_ja: '🇯🇵 日本', country_en: 'Japan', tradition_ja: 'ケーキと誕生日ソング', tradition_en: 'Birthday cake and song' },
+  { country_ja: '🇺🇸 アメリカ', country_en: 'USA', tradition_ja: 'バースデーパーティー', tradition_en: 'Birthday parties' },
+  { country_ja: '🇲🇽 メキシコ', country_en: 'Mexico', tradition_ja: 'ピニャータ割り', tradition_en: 'Piñata breaking' },
+  { country_ja: '🇧🇷 ブラジル', country_en: 'Brazil', tradition_ja: '耳たぶを引っ張る', tradition_en: 'Pulling earlobes' },
+  { country_ja: '🇨🇳 中国', country_en: 'China', tradition_ja: '長寿麺を食べる', tradition_en: 'Eating longevity noodles' },
+  { country_ja: '🇮🇳 インド', country_en: 'India', tradition_ja: 'カラフルな服を着る', tradition_en: 'Wearing colorful clothes' },
+];
+
 export default function HomePage() {
   const t = useTranslations('home');
   const tCommon = useTranslations('common');
@@ -137,12 +189,14 @@ export default function HomePage() {
   const [day, setDay] = useState(currentDay);
   const [isLoading, setIsLoading] = useState(true);
 
+  // 誕生日に基づくデータ計算
+  const ageData = calculateAge(year, month, day);
   const todayBirthstone = BIRTHSTONES[currentMonth];
   const todayFlower = SAMPLE_FLOWERS[currentMonth];
   const todayColor = SAMPLE_COLORS[currentMonth];
-  const zodiacSign = getZodiacSign(currentMonth, currentDay);
+  const zodiacSign = getZodiacSign(month, day);
   const zodiac = ZODIAC_SIGNS[zodiacSign];
-  const chineseZodiac = CHINESE_ZODIAC[(currentYear - 4) % 12];
+  const chineseZodiac = CHINESE_ZODIAC[(year - 4) % 12];
   const japaneseEra = getJapaneseEra(currentYear);
 
   useEffect(() => {
@@ -291,6 +345,53 @@ export default function HomePage() {
               </div>
             </div>
 
+            {/* Age Card */}
+            <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
+                Age · 年齢
+              </p>
+              <div className="flex items-baseline gap-2 mb-2">
+                <h3 className="text-5xl font-bold text-stone-900">
+                  {ageData.age}
+                </h3>
+                <span className="text-xl text-stone-400">{isJa ? '歳' : 'years'}</span>
+              </div>
+              <p className="text-sm text-stone-500">
+                {ageData.days.toLocaleString()}{isJa ? '日目' : ' days lived'}
+              </p>
+            </div>
+
+            {/* Next Birthday Card */}
+            <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
+                Next Birthday
+              </p>
+              <div className="flex items-baseline gap-2 mb-2">
+                <h3 className="text-5xl font-bold text-stone-900">
+                  {ageData.daysUntilBirthday}
+                </h3>
+                <span className="text-xl text-stone-400">{isJa ? '日後' : ' days'}</span>
+              </div>
+              <p className="text-sm text-stone-500">
+                {ageData.nextBirthday.getFullYear()}.
+                {(ageData.nextBirthday.getMonth() + 1).toString().padStart(2, '0')}.
+                {ageData.nextBirthday.getDate().toString().padStart(2, '0')}
+              </p>
+            </div>
+
+            {/* Day of Week Card */}
+            <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
+                Born On
+              </p>
+              <h3 className="text-3xl font-bold text-stone-900 mb-2">
+                {isJa ? ageData.dayOfWeekJa : ageData.dayOfWeek}
+              </h3>
+              <p className="text-sm text-stone-400">
+                {isJa ? ageData.dayOfWeek : ageData.dayOfWeekJa}
+              </p>
+            </div>
+
             {/* Zodiac */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
@@ -390,6 +491,26 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-xs text-stone-400 mt-4">※本厄の年齢</p>
+            </div>
+
+            {/* World Birthday Traditions - Wide */}
+            <div className="col-span-12 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-6">
+                {isJa ? '🌍 世界の誕生日' : '🌍 Birthday Traditions Around the World'}
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {WORLD_BIRTHDAY_TRADITIONS.map((tradition, i) => (
+                  <div key={i} className="text-center p-4 rounded-xl bg-stone-50 hover:bg-stone-100 transition-colors">
+                    <p className="text-2xl mb-2">{tradition.country_ja.split(' ')[0]}</p>
+                    <p className="text-xs font-semibold text-stone-700 mb-1">
+                      {isJa ? tradition.country_ja.split(' ')[1] : tradition.country_en}
+                    </p>
+                    <p className="text-xs text-stone-500">
+                      {isJa ? tradition.tradition_ja : tradition.tradition_en}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
