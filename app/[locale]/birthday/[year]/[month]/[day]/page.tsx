@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { getAge, getZodiacSign, getChineseZodiac, getWareki, getYakudoshi } from '@/lib/birthday-utils';
+import { getFamousBirthdays } from '@/lib/famous-birthdays';
 
 interface Props {
   params: Promise<{
@@ -38,6 +39,7 @@ export default async function BirthdayPage({ params }: Props) {
   const chineseZodiac = getChineseZodiac(yearNum);
   const wareki = getWareki(yearNum, monthNum, dayNum);
   const yakudoshi = getYakudoshi(yearNum, birthdate);
+  const famousPeople = getFamousBirthdays(monthNum, dayNum);
 
   const t = useTranslations('birthday');
 
@@ -160,6 +162,37 @@ export default async function BirthdayPage({ params }: Props) {
                   )}
                 </div>
               </div>
+            </div>
+          </section>
+        )}
+
+        {/* Famous People with Same Birthday */}
+        {famousPeople.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800 border-b-2 border-pink-200 pb-2">
+              {locale === 'ja' ? '👤 同じ誕生日の有名人' : '👤 Famous People Born This Day'}
+            </h2>
+            <div className="grid gap-4">
+              {famousPeople.map((person, index) => (
+                <div key={index} className="bg-gradient-to-br from-slate-50 to-gray-50 p-5 rounded-xl flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                    {person.name[locale === 'ja' ? 'ja' : 'en'].charAt(0)}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {person.name[locale === 'ja' ? 'ja' : 'en']}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {person.profession[locale === 'ja' ? 'ja' : 'en']}
+                      {person.birthYear > 0 && (
+                        <span className="ml-2 text-gray-400">
+                          ({person.birthYear}{person.deathYear ? `-${person.deathYear}` : ''})
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
         )}

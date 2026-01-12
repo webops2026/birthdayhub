@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useBirthday } from '@/lib/birthday-context';
+import { getFamousBirthdays, FamousPerson } from '@/lib/famous-birthdays';
 
 interface Birthstone {
   id: string;
@@ -349,6 +350,7 @@ export default function HomePage() {
   const rokuyo = getRokuyo(year, month, day); // 六曜
   const sekki = getSekki(month, day); // 二十四節気
   const yakudoshi = getYakudoshi(year, currentYear); // 厄年
+  const famousPeople = getFamousBirthdays(month, day); // 同じ誕生日の有名人
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 300);
@@ -805,6 +807,33 @@ export default function HomePage() {
               </div>
               <p className="text-xs text-stone-400 mt-4">※本厄・大厄の年齢（数え年）</p>
             </div>
+
+            {/* Famous People - Wide */}
+            {famousPeople.length > 0 && (
+              <div className="col-span-12 lg:col-span-6 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+                <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-6">
+                  👤 {isJa ? '同じ誕生日の有名人' : 'Famous People Born This Day'}
+                </p>
+                <div className="space-y-3">
+                  {famousPeople.slice(0, 3).map((person, index) => (
+                    <div key={index} className="flex items-center gap-3 p-3 bg-stone-50 rounded-xl">
+                      <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        {person.name[isJa ? 'ja' : 'en'].charAt(0)}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-stone-800 text-sm truncate">
+                          {person.name[isJa ? 'ja' : 'en']}
+                        </p>
+                        <p className="text-xs text-stone-500 truncate">
+                          {person.profession[isJa ? 'ja' : 'en']}
+                          {person.birthYear > 0 && ` (${person.birthYear})`}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Education Timeline - Wide (日本語のみ) */}
             {isJa && (

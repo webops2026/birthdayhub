@@ -7,7 +7,7 @@ BRAND_NAME="birthdayhub"
 PROJECT_DIR="/root/legacybrands/birthdayhub"
 SESSION_NAME="${BRAND_NAME}-dev"
 
-INIT_MESSAGE="CLAUDE.mdと/root/legacybrands/docs/共通開発ルール.mdを読んでください。準備ができたらオーナー（私）に挨拶して「このプロジェクトで何をしましょうか？」と聞いてください。"
+INIT_MESSAGE="CLAUDE.mdと/root/legacybrands/docs/共通開発ルール.mdを読んでください。準備ができたらオーナー（私）に挨拶して「このプロジェクトで何をしましょうか？」と聞いてください。作業後はドキュメントの更新を忘れずに行ってください。"
 
 echo "🚀 $BRAND_NAME 開発セッションを起動します..."
 
