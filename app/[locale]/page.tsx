@@ -309,16 +309,6 @@ function getYakudoshi(birthYear: number, currentYear: number): {
   };
 }
 
-// 世界の誕生日文化データ
-const WORLD_BIRTHDAY_TRADITIONS = [
-  { country_ja: '🇯🇵 日本', country_en: 'Japan', tradition_ja: 'ケーキと誕生日ソング', tradition_en: 'Birthday cake and song' },
-  { country_ja: '🇺🇸 アメリカ', country_en: 'USA', tradition_ja: 'バースデーパーティー', tradition_en: 'Birthday parties' },
-  { country_ja: '🇲🇽 メキシコ', country_en: 'Mexico', tradition_ja: 'ピニャータ割り', tradition_en: 'Piñata breaking' },
-  { country_ja: '🇧🇷 ブラジル', country_en: 'Brazil', tradition_ja: '耳たぶを引っ張る', tradition_en: 'Pulling earlobes' },
-  { country_ja: '🇨🇳 中国', country_en: 'China', tradition_ja: '長寿麺を食べる', tradition_en: 'Eating longevity noodles' },
-  { country_ja: '🇮🇳 インド', country_en: 'India', tradition_ja: 'カラフルな服を着る', tradition_en: 'Wearing colorful clothes' },
-];
-
 export default function HomePage() {
   const t = useTranslations('home');
   const tCommon = useTranslations('common');
@@ -350,7 +340,7 @@ export default function HomePage() {
   const rokuyo = getRokuyo(year, month, day); // 六曜
   const sekki = getSekki(month, day); // 二十四節気
   const yakudoshi = getYakudoshi(year, currentYear); // 厄年
-  const famousPeople = getFamousBirthdays(month, day); // 同じ誕生日の有名人
+  const famousPeople = getFamousBirthdays(month, day, locale); // 同じ誕生日の有名人
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 300);
@@ -902,26 +892,6 @@ export default function HomePage() {
                 </p>
               </div>
             )}
-
-            {/* World Birthday Traditions - Wide */}
-            <div className="col-span-12 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
-              <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-6">
-                {isJa ? '🌍 世界の誕生日' : '🌍 Birthday Traditions Around the World'}
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {WORLD_BIRTHDAY_TRADITIONS.map((tradition, i) => (
-                  <div key={i} className="text-center p-4 rounded-xl bg-stone-50 hover:bg-stone-100 transition-colors">
-                    <p className="text-2xl mb-2">{tradition.country_ja.split(' ')[0]}</p>
-                    <p className="text-xs font-semibold text-stone-700 mb-1">
-                      {isJa ? tradition.country_ja.split(' ')[1] : tradition.country_en}
-                    </p>
-                    <p className="text-xs text-stone-500">
-                      {isJa ? tradition.tradition_ja : tradition.tradition_en}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
 
           </div>
         </div>

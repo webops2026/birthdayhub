@@ -14,6 +14,19 @@ echo "🚀 $BRAND_NAME 開発セッションを起動します..."
 # tmux内かどうかで接続方法を変える
 connect_session() {
     if [ -n "$TMUX" ]; then
+        # 既に同じセッション内にいるかチェック
+        CURRENT_SESSION=$(tmux display-message -p '#S')
+        if [ "$CURRENT_SESSION" = "$SESSION_NAME" ]; then
+            echo "✅ 既にこのセッション内にいます"
+            echo "🖥️  新しいウィンドウでClaude Codeを起動します..."
+            tmux new-window -t $SESSION_NAME -c "$PROJECT_DIR"
+            tmux send-keys "claude" C-m
+            echo "⏳ Claude Codeの起動を待っています（3秒）..."
+            sleep 3
+            echo "📨 初期メッセージを送信中..."
+            tmux send-keys "$INIT_MESSAGE" C-m
+            exit 0
+        fi
         exec tmux switch-client -t $SESSION_NAME
     else
         exec tmux attach -t $SESSION_NAME
