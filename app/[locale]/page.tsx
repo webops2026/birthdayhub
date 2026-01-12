@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useBirthday } from '@/lib/birthday-context';
 
 interface Birthstone {
   id: string;
@@ -220,14 +221,13 @@ export default function HomePage() {
   const params = useParams();
   const locale = params.locale as string;
 
+  // Context から誕生日状態を取得
+  const birthday = useBirthday();
+  const { year, month, day, setYear: setContextYear, setMonth: setContextMonth, setDay: setContextDay } = birthday;
+
   const today = new Date();
   const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth() + 1;
-  const currentDay = today.getDate();
 
-  const [year, setYear] = useState(currentYear - 30);
-  const [month, setMonth] = useState(currentMonth);
-  const [day, setDay] = useState(currentDay);
   const [isLoading, setIsLoading] = useState(true);
   const [useWareki, setUseWareki] = useState(false); // 和暦モード切替
   const [selectedEra, setSelectedEra] = useState('令和'); // 選択された元号
@@ -277,7 +277,7 @@ export default function HomePage() {
   const handleEraYearChange = (newEraYear: number) => {
     setEraYear(newEraYear);
     const newYear = warekiToSeireki(selectedEra, newEraYear);
-    setYear(newYear);
+    setContextYear(newYear);
   };
 
   // 元号変更時に西暦を更新
@@ -286,15 +286,25 @@ export default function HomePage() {
     // 新しい元号の1年目にリセット
     setEraYear(1);
     const newYear = warekiToSeireki(newEra, 1);
-    setYear(newYear);
+    setContextYear(newYear);
   };
 
   // 西暦変更時に和暦を更新
   const handleYearChange = (newYear: number) => {
-    setYear(newYear);
+    setContextYear(newYear);
     const wareki = seirekiToWareki(newYear);
     setSelectedEra(wareki.era);
     setEraYear(wareki.eraYear);
+  };
+
+  // 月変更
+  const handleMonthChange = (newMonth: number) => {
+    setContextMonth(newMonth);
+  };
+
+  // 日変更
+  const handleDayChange = (newDay: number) => {
+    setContextDay(newDay);
   };
 
   // 西暦モードに切り替え
@@ -349,20 +359,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Hero Section */}
-      <section className="pt-20 pb-16 px-6">
+      <section className="pt-12 pb-16 px-6">
         <div className="max-w-7xl mx-auto">
-          {/* Date Display */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-baseline gap-4 mb-6">
-              <time className="text-7xl font-bold tracking-tighter text-stone-900">
-                {year}.{month.toString().padStart(2, '0')}.{day.toString().padStart(2, '0')}
-              </time>
-            </div>
-            <p className="text-lg text-stone-500 font-light tracking-wide">
-              {selectedDateWareki.era}{selectedDateWareki.eraYear}年 · {zodiac.name_ja}
-            </p>
-          </div>
-
           {/* Birthday Input Form */}
           <div className="max-w-2xl mx-auto mb-16">
             {/* 日本語ページの場合、西暦/和暦切替ボタン */}
@@ -420,7 +418,7 @@ export default function HomePage() {
                   <span className="text-stone-400">/</span>
                   <select
                     value={month}
-                    onChange={(e) => setMonth(Number(e.target.value))}
+                    onChange={(e) => handleMonthChange(Number(e.target.value))}
                     className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
                   >
                     {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
@@ -430,7 +428,7 @@ export default function HomePage() {
                   <span className="text-stone-400">/</span>
                   <select
                     value={day}
-                    onChange={(e) => setDay(Number(e.target.value))}
+                    onChange={(e) => handleDayChange(Number(e.target.value))}
                     className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
                   >
                     {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
@@ -453,7 +451,7 @@ export default function HomePage() {
                   <span className="text-stone-400">/</span>
                   <select
                     value={month}
-                    onChange={(e) => setMonth(Number(e.target.value))}
+                    onChange={(e) => handleMonthChange(Number(e.target.value))}
                     className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
                   >
                     {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
@@ -463,7 +461,7 @@ export default function HomePage() {
                   <span className="text-stone-400">/</span>
                   <select
                     value={day}
-                    onChange={(e) => setDay(Number(e.target.value))}
+                    onChange={(e) => handleDayChange(Number(e.target.value))}
                     className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
                   >
                     {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (

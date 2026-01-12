@@ -4,7 +4,8 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Inter, Noto_Sans_JP } from 'next/font/google';
-import MobileMenu from '@/components/MobileMenu';
+import { BirthdayProvider } from '@/lib/birthday-context';
+import Header from '@/components/Header';
 import "./globals.css";
 
 const inter = Inter({
@@ -61,69 +62,13 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${inter.variable} ${notoSansJP.variable}`}>
       <body className="font-sans antialiased bg-stone-50 text-stone-900">
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen flex flex-col">
-            {/* Header */}
-            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-stone-200">
-              <nav className="max-w-7xl mx-auto px-6 py-5">
-                <div className="flex items-center justify-between">
-                  {/* Logo */}
-                  <a href={`/${locale}`} className="flex items-center gap-3 group">
-                    <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center group-hover:bg-stone-200 transition-colors">
-                      <span className="text-2xl">🎂</span>
-                    </div>
-                    <span className="text-xl font-bold text-stone-900 tracking-tight">
-                      BirthdayHub
-                    </span>
-                  </a>
+          <BirthdayProvider locale={locale}>
+            <div className="min-h-screen flex flex-col">
+              {/* Header */}
+              <Header locale={locale} navItems={navItems} />
 
-                  {/* Navigation */}
-                  <div className="flex items-center gap-8">
-                    {/* Desktop Menu */}
-                    <div className="hidden md:flex items-center gap-2">
-                      {navItems.map((item) => (
-                        <a
-                          key={item.href}
-                          href={item.href}
-                          className="px-4 py-2 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-50 text-sm font-medium transition-all"
-                        >
-                          {item.label}
-                        </a>
-                      ))}
-                    </div>
-
-                    {/* Language Switcher - Desktop */}
-                    <div className="hidden md:flex items-center border-l border-stone-200 pl-6">
-                      <a
-                        href="/ja"
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                          locale === 'ja'
-                            ? 'bg-stone-200 text-stone-900'
-                            : 'text-stone-500 hover:text-stone-900 hover:bg-stone-50'
-                        }`}
-                      >
-                        JA
-                      </a>
-                      <a
-                        href="/en"
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                          locale === 'en'
-                            ? 'bg-stone-200 text-stone-900'
-                            : 'text-stone-500 hover:text-stone-900 hover:bg-stone-50'
-                        }`}
-                      >
-                        EN
-                      </a>
-                    </div>
-
-                    {/* Mobile Menu */}
-                    <MobileMenu locale={locale} navItems={navItems} />
-                  </div>
-                </div>
-              </nav>
-            </header>
-
-            {/* Main Content */}
-            <main className="flex-1">{children}</main>
+              {/* Main Content */}
+              <main className="flex-1">{children}</main>
 
             {/* Footer */}
             <footer className="bg-stone-50 text-stone-900 mt-20 py-16 border-t border-stone-200">
@@ -187,7 +132,8 @@ export default async function LocaleLayout({
                 </div>
               </div>
             </footer>
-          </div>
+            </div>
+          </BirthdayProvider>
         </NextIntlClientProvider>
       </body>
     </html>
