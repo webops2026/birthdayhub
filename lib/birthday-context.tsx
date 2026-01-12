@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 interface BirthdayContextType {
@@ -35,6 +35,9 @@ export function BirthdayProvider({
   const router = useRouter();
   const pathname = usePathname();
 
+  // 実際の現在のパスを追跡するref（history.replaceStateでも更新される）
+  const currentPathRef = useRef(pathname);
+
   // デフォルト値
   const today = new Date();
   const defaultYear = today.getFullYear() - 30;
@@ -46,6 +49,11 @@ export function BirthdayProvider({
   const [day, setDayState] = useState(defaultDay);
   const [isSet, setIsSet] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // pathnameが変更されたらrefを更新
+  useEffect(() => {
+    currentPathRef.current = pathname;
+  }, [pathname]);
 
   // 初期化: localStorage から読み込み
   useEffect(() => {
@@ -75,10 +83,16 @@ export function BirthdayProvider({
     }
     setIsSet(true);
 
-    // ホームページの場合のみ URL を更新
-    if (pathname === `/${locale}` || pathname === `/${locale}/`) {
-      const newUrl = `/${locale}/birthday/${y}/${m.toString().padStart(2, '0')}/${d.toString().padStart(2, '0')}`;
+    const newUrl = `/${locale}/birthday/${y}/${m.toString().padStart(2, '0')}/${d.toString().padStart(2, '0')}`;
+    const currentPath = currentPathRef.current;
+
+    // ホームページまたは誕生日ページの場合にURLを更新
+    const isHomePage = currentPath === `/${locale}` || currentPath === `/${locale}/`;
+    const isBirthdayPage = currentPath.startsWith(`/${locale}/birthday/`);
+
+    if (isHomePage || isBirthdayPage) {
       window.history.replaceState(null, '', newUrl);
+      currentPathRef.current = newUrl; // refも更新
     }
   };
 
