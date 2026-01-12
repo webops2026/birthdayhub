@@ -431,7 +431,7 @@ export default function HomePage() {
   // 各元号の最大年数を取得
   const getMaxEraYear = (era: string): number => {
     const eraRanges: { [key: string]: { start: number; end: number } } = {
-      '令和': { start: 2019, end: currentYear + 1 }, // 2019年〜来年（未来の出産予定日にも対応）
+      '令和': { start: 2019, end: currentYear + 1 }, // 2019年〜来年（未来の日付にも対応）
       '平成': { start: 1989, end: 2019 }, // 1989年〜2019年（31年間）
       '昭和': { start: 1926, end: 1989 }, // 1926年〜1989年（64年間）
       '大正': { start: 1912, end: 1926 }, // 1912年〜1926年（15年間）
@@ -605,7 +605,7 @@ export default function HomePage() {
               </div>
               <p className="text-sm text-stone-500">
                 {ageData.isFuture
-                  ? (isJa ? '出産予定日' : 'Expected due date')
+                  ? ''
                   : `${ageData.days.toLocaleString()}${isJa ? '日目' : ' days lived'}`}
               </p>
             </div>
