@@ -12,6 +12,7 @@ interface BirthdayContextType {
   setDay: (day: number) => void;
   setBirthday: (year: number, month: number, day: number) => void;
   isSet: boolean;
+  isInitialized: boolean;
 }
 
 const BirthdayContext = createContext<BirthdayContextType | undefined>(undefined);
@@ -103,11 +104,6 @@ export function BirthdayProvider({
     saveBirthday(y, m, d);
   };
 
-  // 初期化前は何も表示しない（ハイドレーションエラー防止）
-  if (!isInitialized) {
-    return null;
-  }
-
   return (
     <BirthdayContext.Provider value={{
       year,
@@ -117,7 +113,8 @@ export function BirthdayProvider({
       setMonth,
       setDay,
       setBirthday,
-      isSet
+      isSet,
+      isInitialized
     }}>
       {children}
     </BirthdayContext.Provider>

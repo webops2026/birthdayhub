@@ -14,7 +14,7 @@ interface HeaderProps {
 }
 
 export default function Header({ locale, navItems }: HeaderProps) {
-  const { year, month, day, isSet } = useBirthday();
+  const { year, month, day, isSet, isInitialized } = useBirthday();
 
   const formattedDate = `${year}.${month.toString().padStart(2, '0')}.${day.toString().padStart(2, '0')}`;
 
@@ -33,7 +33,7 @@ export default function Header({ locale, navItems }: HeaderProps) {
           </a>
 
           {/* Date Display - Center */}
-          {isSet && (
+          {isInitialized && isSet && (
             <a
               href={`/${locale}/birthday/${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`}
               className="hidden lg:block"
