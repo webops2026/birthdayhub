@@ -34,6 +34,7 @@ URL: https://oipojpaphzcnjurfmemm.supabase.co
 - 和暦変換（日本版）
 - 厄年計算（日本版）
 - 有名人機能（366日分実装済み）
+- 人生の記念日（Life Milestones）- 1万日目、10億秒などの節目を計算
 - Life Path Number（英語版）※未実装
 
 ## このプロジェクト固有の注意事項
