@@ -1,7 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useBirthday } from '@/lib/birthday-context';
 
 // 月別誕生石データ（充実版）
 const BIRTHSTONES = [
@@ -156,6 +157,21 @@ export default function BirthstonesPage() {
   const locale = params.locale as string;
   const isJa = locale === 'ja';
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+  const { month: birthMonth, isSet, isInitialized } = useBirthday();
+
+  // 誕生月に自動スクロール
+  useEffect(() => {
+    if (isInitialized && isSet) {
+      // 少し遅延させてDOMが確実にレンダリングされてからスクロール
+      const timer = setTimeout(() => {
+        const element = document.getElementById(`month-${birthMonth}`);
+        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setSelectedMonth(birthMonth);
+        setTimeout(() => setSelectedMonth(null), 2000);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isInitialized, isSet, birthMonth]);
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
