@@ -205,6 +205,97 @@ function calculateEducation(birthYear: number, birthMonth: number, birthDay: num
   };
 }
 
+// 六曜計算
+function getRokuyo(year: number, month: number, day: number): { name: string; meaning: string } {
+  // 旧暦変換は複雑なため、簡易計算を使用
+  // (月 + 日) % 6 で近似計算
+  const rokuyoList = [
+    { name: '大安', meaning: '万事に吉' },
+    { name: '赤口', meaning: '正午のみ吉' },
+    { name: '先勝', meaning: '午前中が吉' },
+    { name: '友引', meaning: '朝夕は吉' },
+    { name: '先負', meaning: '午後が吉' },
+    { name: '仏滅', meaning: '万事に凶' },
+  ];
+  const index = (month + day) % 6;
+  return rokuyoList[index];
+}
+
+// 二十四節気計算
+function getSekki(month: number, day: number): { name: string; meaning: string } {
+  const sekkiList = [
+    { start: [1, 5], name: '小寒', meaning: '寒の入り' },
+    { start: [1, 20], name: '大寒', meaning: '最も寒い時期' },
+    { start: [2, 4], name: '立春', meaning: '春の始まり' },
+    { start: [2, 19], name: '雨水', meaning: '雪が雨に変わる' },
+    { start: [3, 6], name: '啓蟄', meaning: '虫が動き出す' },
+    { start: [3, 21], name: '春分', meaning: '昼夜の長さが等しい' },
+    { start: [4, 5], name: '清明', meaning: '清らかで明るい' },
+    { start: [4, 20], name: '穀雨', meaning: '穀物を潤す雨' },
+    { start: [5, 6], name: '立夏', meaning: '夏の始まり' },
+    { start: [5, 21], name: '小満', meaning: '草木が茂る' },
+    { start: [6, 6], name: '芒種', meaning: '穀物の種まき' },
+    { start: [6, 21], name: '夏至', meaning: '昼が最も長い' },
+    { start: [7, 7], name: '小暑', meaning: '暑さが始まる' },
+    { start: [7, 23], name: '大暑', meaning: '最も暑い時期' },
+    { start: [8, 7], name: '立秋', meaning: '秋の始まり' },
+    { start: [8, 23], name: '処暑', meaning: '暑さが収まる' },
+    { start: [9, 8], name: '白露', meaning: '草に露が降りる' },
+    { start: [9, 23], name: '秋分', meaning: '昼夜の長さが等しい' },
+    { start: [10, 8], name: '寒露', meaning: '露が冷たくなる' },
+    { start: [10, 24], name: '霜降', meaning: '霜が降りる' },
+    { start: [11, 7], name: '立冬', meaning: '冬の始まり' },
+    { start: [11, 22], name: '小雪', meaning: '雪が降り始める' },
+    { start: [12, 7], name: '大雪', meaning: '雪が多くなる' },
+    { start: [12, 22], name: '冬至', meaning: '昼が最も短い' },
+  ];
+
+  // 該当する節気を逆順で探す
+  for (let i = sekkiList.length - 1; i >= 0; i--) {
+    const [sekkiMonth, sekkiDay] = sekkiList[i].start;
+    if (month > sekkiMonth || (month === sekkiMonth && day >= sekkiDay)) {
+      return { name: sekkiList[i].name, meaning: sekkiList[i].meaning };
+    }
+  }
+  // 1月初旬は前年の冬至の期間
+  return { name: '冬至', meaning: '昼が最も短い' };
+}
+
+// 厄年計算
+function getYakudoshi(birthYear: number, currentYear: number): {
+  isYakudoshi: boolean;
+  type: string;
+  maleYakudoshi: { age: number; type: string }[];
+  femaleYakudoshi: { age: number; type: string }[];
+} {
+  const age = currentYear - birthYear + 1; // 数え年
+
+  // 男性の厄年（数え年）
+  const maleYakuAges = [
+    { age: 24, type: '前厄' }, { age: 25, type: '本厄' }, { age: 26, type: '後厄' },
+    { age: 41, type: '前厄' }, { age: 42, type: '大厄' }, { age: 43, type: '後厄' },
+    { age: 60, type: '前厄' }, { age: 61, type: '本厄' }, { age: 62, type: '後厄' },
+  ];
+
+  // 女性の厄年（数え年）
+  const femaleYakuAges = [
+    { age: 18, type: '前厄' }, { age: 19, type: '本厄' }, { age: 20, type: '後厄' },
+    { age: 32, type: '前厄' }, { age: 33, type: '大厄' }, { age: 34, type: '後厄' },
+    { age: 36, type: '前厄' }, { age: 37, type: '本厄' }, { age: 38, type: '後厄' },
+    { age: 60, type: '前厄' }, { age: 61, type: '本厄' }, { age: 62, type: '後厄' },
+  ];
+
+  const maleMatch = maleYakuAges.find(y => y.age === age);
+  const femaleMatch = femaleYakuAges.find(y => y.age === age);
+
+  return {
+    isYakudoshi: !!(maleMatch || femaleMatch),
+    type: maleMatch?.type || femaleMatch?.type || '',
+    maleYakudoshi: maleYakuAges.filter(y => y.type === '本厄' || y.type === '大厄'),
+    femaleYakudoshi: femaleYakuAges.filter(y => y.type === '本厄' || y.type === '大厄'),
+  };
+}
+
 // 世界の誕生日文化データ
 const WORLD_BIRTHDAY_TRADITIONS = [
   { country_ja: '🇯🇵 日本', country_en: 'Japan', tradition_ja: 'ケーキと誕生日ソング', tradition_en: 'Birthday cake and song' },
@@ -242,7 +333,10 @@ export default function HomePage() {
   const zodiacSign = getZodiacSign(month, day);
   const zodiac = ZODIAC_SIGNS[zodiacSign];
   const chineseZodiac = CHINESE_ZODIAC[(year - 4) % 12];
-  const japaneseEra = getJapaneseEra(currentYear);
+  const birthEra = getJapaneseEra(year); // 誕生年の元号
+  const rokuyo = getRokuyo(year, month, day); // 六曜
+  const sekki = getSekki(month, day); // 二十四節気
+  const yakudoshi = getYakudoshi(year, currentYear); // 厄年
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 300);
@@ -539,15 +633,15 @@ export default function HomePage() {
               <p className="text-xs text-stone-400 mt-2">{zodiac.period}</p>
             </div>
 
-            {/* Era */}
+            {/* Era - 誕生年の元号 */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
-                Era
+                Era · 元号
               </p>
               <h3 className="text-3xl font-bold text-stone-900 mb-2">
-                {japaneseEra.era}{japaneseEra.eraYear}年
+                {birthEra.era}{birthEra.eraYear}年
               </h3>
-              <p className="text-stone-500 text-sm">{currentYear}年</p>
+              <p className="text-stone-500 text-sm">{year}年生まれ</p>
             </div>
 
             {/* Chinese Zodiac */}
@@ -646,8 +740,8 @@ export default function HomePage() {
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
                 六曜
               </p>
-              <h3 className="text-2xl font-bold text-stone-900 mb-1">大安</h3>
-              <p className="text-xs text-stone-500">万事に吉</p>
+              <h3 className="text-2xl font-bold text-stone-900 mb-1">{rokuyo.name}</h3>
+              <p className="text-xs text-stone-500">{rokuyo.meaning}</p>
             </div>
 
             {/* 24 Sekki */}
@@ -655,8 +749,8 @@ export default function HomePage() {
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
                 二十四節気
               </p>
-              <h3 className="text-2xl font-bold text-stone-900 mb-1">小寒</h3>
-              <p className="text-xs text-stone-500">寒の入り</p>
+              <h3 className="text-2xl font-bold text-stone-900 mb-1">{sekki.name}</h3>
+              <p className="text-xs text-stone-500">{sekki.meaning}</p>
             </div>
 
             {/* Yakudoshi - Wide */}
@@ -664,17 +758,28 @@ export default function HomePage() {
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-6">
                 厄年 Yakudoshi
               </p>
+              {yakudoshi.isYakudoshi && (
+                <div className="mb-4 p-3 bg-red-50 rounded-lg">
+                  <p className="text-sm font-semibold text-red-700">
+                    現在{yakudoshi.type}です（数え年 {currentYear - year + 1}歳）
+                  </p>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <p className="text-sm font-semibold text-stone-700 mb-2">男性</p>
-                  <p className="text-sm text-stone-500">25歳・42歳・61歳</p>
+                  <p className="text-sm text-stone-500">
+                    {yakudoshi.maleYakudoshi.map(y => `${y.age}歳`).join('・')}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-stone-700 mb-2">女性</p>
-                  <p className="text-sm text-stone-500">19歳・33歳・37歳・61歳</p>
+                  <p className="text-sm text-stone-500">
+                    {yakudoshi.femaleYakudoshi.map(y => `${y.age}歳`).join('・')}
+                  </p>
                 </div>
               </div>
-              <p className="text-xs text-stone-400 mt-4">※本厄の年齢</p>
+              <p className="text-xs text-stone-400 mt-4">※本厄・大厄の年齢（数え年）</p>
             </div>
 
             {/* Education Timeline - Wide (日本語のみ) */}
