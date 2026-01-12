@@ -274,6 +274,129 @@ function getSekki(month: number, day: number): { name: string; meaning: string }
   return { name: '冬至', meaning: '昼が最も短い' };
 }
 
+// 人生のマイルストーン計算
+interface Milestone {
+  type: 'days' | 'seconds' | 'weeks';
+  value: number;
+  label_ja: string;
+  label_en: string;
+  date: Date;
+  isPast: boolean;
+  daysFromNow: number;
+}
+
+function calculateLifeMilestones(birthYear: number, birthMonth: number, birthDay: number): {
+  milestones: Milestone[];
+  nextMilestone: Milestone | null;
+  recentPastMilestone: Milestone | null;
+} {
+  const today = new Date();
+  const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+
+  // 未来の誕生日は空を返す
+  if (birthDate > today) {
+    return { milestones: [], nextMilestone: null, recentPastMilestone: null };
+  }
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const daysLived = Math.floor((today.getTime() - birthDate.getTime()) / msPerDay);
+
+  // 興味深いマイルストーン定義
+  const dayMilestones = [
+    { days: 1000, label_ja: '1,000日', label_en: '1,000 days' },
+    { days: 2000, label_ja: '2,000日', label_en: '2,000 days' },
+    { days: 3000, label_ja: '3,000日', label_en: '3,000 days' },
+    { days: 5000, label_ja: '5,000日', label_en: '5,000 days' },
+    { days: 7777, label_ja: '7,777日', label_en: '7,777 days' },
+    { days: 10000, label_ja: '10,000日', label_en: '10,000 days' },
+    { days: 11111, label_ja: '11,111日', label_en: '11,111 days' },
+    { days: 12345, label_ja: '12,345日', label_en: '12,345 days' },
+    { days: 15000, label_ja: '15,000日', label_en: '15,000 days' },
+    { days: 20000, label_ja: '20,000日', label_en: '20,000 days' },
+    { days: 22222, label_ja: '22,222日', label_en: '22,222 days' },
+    { days: 25000, label_ja: '25,000日', label_en: '25,000 days' },
+    { days: 30000, label_ja: '30,000日', label_en: '30,000 days' },
+    { days: 33333, label_ja: '33,333日', label_en: '33,333 days' },
+  ];
+
+  const secondMilestones = [
+    { seconds: 1000000000, label_ja: '10億秒', label_en: '1 Billion Seconds' }, // 約31.7年
+  ];
+
+  const weekMilestones = [
+    { weeks: 1000, label_ja: '1,000週', label_en: '1,000 weeks' }, // 約19年
+    { weeks: 2000, label_ja: '2,000週', label_en: '2,000 weeks' }, // 約38年
+    { weeks: 3000, label_ja: '3,000週', label_en: '3,000 weeks' }, // 約57年
+  ];
+
+  const milestones: Milestone[] = [];
+
+  // 日数マイルストーン
+  for (const m of dayMilestones) {
+    const milestoneDate = new Date(birthDate.getTime() + m.days * msPerDay);
+    const isPast = milestoneDate <= today;
+    const daysFromNow = Math.ceil((milestoneDate.getTime() - today.getTime()) / msPerDay);
+
+    milestones.push({
+      type: 'days',
+      value: m.days,
+      label_ja: m.label_ja,
+      label_en: m.label_en,
+      date: milestoneDate,
+      isPast,
+      daysFromNow,
+    });
+  }
+
+  // 秒数マイルストーン
+  for (const m of secondMilestones) {
+    const milestoneDate = new Date(birthDate.getTime() + m.seconds * 1000);
+    const isPast = milestoneDate <= today;
+    const daysFromNow = Math.ceil((milestoneDate.getTime() - today.getTime()) / msPerDay);
+
+    milestones.push({
+      type: 'seconds',
+      value: m.seconds,
+      label_ja: m.label_ja,
+      label_en: m.label_en,
+      date: milestoneDate,
+      isPast,
+      daysFromNow,
+    });
+  }
+
+  // 週数マイルストーン
+  for (const m of weekMilestones) {
+    const milestoneDate = new Date(birthDate.getTime() + m.weeks * 7 * msPerDay);
+    const isPast = milestoneDate <= today;
+    const daysFromNow = Math.ceil((milestoneDate.getTime() - today.getTime()) / msPerDay);
+
+    milestones.push({
+      type: 'weeks',
+      value: m.weeks,
+      label_ja: m.label_ja,
+      label_en: m.label_en,
+      date: milestoneDate,
+      isPast,
+      daysFromNow,
+    });
+  }
+
+  // 日付順にソート
+  milestones.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  // 次のマイルストーン（未来で最も近いもの）
+  const nextMilestone = milestones.find(m => !m.isPast) || null;
+
+  // 最近過ぎたマイルストーン（過去で最も近いもの）
+  const pastMilestones = milestones.filter(m => m.isPast);
+  const recentPastMilestone = pastMilestones.length > 0
+    ? pastMilestones[pastMilestones.length - 1]
+    : null;
+
+  return { milestones, nextMilestone, recentPastMilestone };
+}
+
 // 厄年計算
 function getYakudoshi(birthYear: number, currentYear: number): {
   isYakudoshi: boolean;
@@ -341,6 +464,7 @@ export default function HomePage() {
   const sekki = getSekki(month, day); // 二十四節気
   const yakudoshi = getYakudoshi(year, currentYear); // 厄年
   const famousPeople = getFamousBirthdays(month, day, locale); // 同じ誕生日の有名人
+  const lifeMilestones = calculateLifeMilestones(year, month, day); // 人生のマイルストーン
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 300);
@@ -821,6 +945,131 @@ export default function HomePage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* Life Milestones Card - Wide */}
+            {!ageData.isFuture && lifeMilestones.nextMilestone && (
+              <div className="col-span-12 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-white relative overflow-hidden">
+                {/* 背景装飾 */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
+                  <div className="absolute bottom-0 left-0 w-48 h-48 bg-pink-300 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
+                </div>
+
+                <div className="relative z-10">
+                  <p className="text-xs font-medium text-white/60 tracking-widest uppercase mb-6">
+                    {isJa ? '人生の記念日' : 'Life Milestones'}
+                  </p>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* 次のマイルストーン */}
+                    <div>
+                      <p className="text-sm text-white/70 mb-2">
+                        {isJa ? '次の記念日まで' : 'Next Milestone'}
+                      </p>
+                      <div className="flex items-baseline gap-3 mb-2">
+                        <span className="text-5xl font-bold">
+                          {lifeMilestones.nextMilestone.daysFromNow.toLocaleString()}
+                        </span>
+                        <span className="text-xl text-white/70">
+                          {isJa ? '日' : 'days'}
+                        </span>
+                      </div>
+                      <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+                        <p className="text-2xl font-bold mb-1">
+                          {isJa ? lifeMilestones.nextMilestone.label_ja : lifeMilestones.nextMilestone.label_en}
+                        </p>
+                        <p className="text-sm text-white/70">
+                          {lifeMilestones.nextMilestone.date.getFullYear()}.
+                          {(lifeMilestones.nextMilestone.date.getMonth() + 1).toString().padStart(2, '0')}.
+                          {lifeMilestones.nextMilestone.date.getDate().toString().padStart(2, '0')}
+                        </p>
+                        {lifeMilestones.nextMilestone.type === 'seconds' && (
+                          <p className="text-xs text-white/50 mt-1">
+                            {isJa ? '※約31.7年で達成' : '※Achieved in ~31.7 years'}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 最近達成したマイルストーン */}
+                    {lifeMilestones.recentPastMilestone && (
+                      <div>
+                        <p className="text-sm text-white/70 mb-2">
+                          {isJa ? '直近で達成した記念日' : 'Recently Achieved'}
+                        </p>
+                        <div className="flex items-baseline gap-3 mb-2">
+                          <span className="text-5xl font-bold text-green-300">
+                            {Math.abs(lifeMilestones.recentPastMilestone.daysFromNow).toLocaleString()}
+                          </span>
+                          <span className="text-xl text-white/70">
+                            {isJa ? '日前' : 'days ago'}
+                          </span>
+                        </div>
+                        <div className="bg-green-500/20 rounded-xl p-4 backdrop-blur-sm border border-green-400/30">
+                          <p className="text-2xl font-bold mb-1 text-green-300">
+                            {isJa ? lifeMilestones.recentPastMilestone.label_ja : lifeMilestones.recentPastMilestone.label_en}
+                          </p>
+                          <p className="text-sm text-white/70">
+                            {lifeMilestones.recentPastMilestone.date.getFullYear()}.
+                            {(lifeMilestones.recentPastMilestone.date.getMonth() + 1).toString().padStart(2, '0')}.
+                            {lifeMilestones.recentPastMilestone.date.getDate().toString().padStart(2, '0')}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 今後のマイルストーン一覧 */}
+                  <div className="mt-8">
+                    <p className="text-sm text-white/70 mb-3">
+                      {isJa ? '今後の記念日' : 'Upcoming Milestones'}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {lifeMilestones.milestones
+                        .filter(m => !m.isPast)
+                        .slice(0, 6)
+                        .map((m, index) => (
+                          <div
+                            key={index}
+                            className={`px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm ${
+                              index === 0
+                                ? 'bg-white/20 text-white border border-white/30'
+                                : 'bg-white/10 text-white/80'
+                            }`}
+                          >
+                            {isJa ? m.label_ja : m.label_en}
+                            <span className="text-white/50 ml-2 text-xs">
+                              {m.date.getFullYear()}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* 達成済みマイルストーン */}
+                  {lifeMilestones.milestones.filter(m => m.isPast).length > 0 && (
+                    <div className="mt-6 pt-6 border-t border-white/10">
+                      <p className="text-sm text-white/50 mb-3">
+                        {isJa ? '達成済み' : 'Achieved'}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {lifeMilestones.milestones
+                          .filter(m => m.isPast)
+                          .slice(-5)
+                          .map((m, index) => (
+                            <div
+                              key={index}
+                              className="px-3 py-1.5 rounded-full text-xs bg-white/5 text-white/50"
+                            >
+                              {isJa ? m.label_ja : m.label_en} ✓
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
