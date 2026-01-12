@@ -129,38 +129,50 @@ function calculateAge(birthYear: number, birthMonth: number, birthDay: number): 
   daysUntilBirthday: number;
   dayOfWeek: string;
   dayOfWeekJa: string;
+  isFuture: boolean;
+  daysUntilBirth: number;
 } {
   const today = new Date();
   const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
-  
+
+  // 未来の日付かどうか判定
+  const isFuture = birthDate > today;
+
+  // 誕生までの日数（未来の場合）
+  const daysUntilBirth = isFuture
+    ? Math.ceil((birthDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+    : 0;
+
   // 年齢計算
   let age = today.getFullYear() - birthYear;
-  if (today.getMonth() + 1 < birthMonth || 
+  if (today.getMonth() + 1 < birthMonth ||
       (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) {
     age--;
   }
-  
-  // 生存日数
-  const diffTime = Math.abs(today.getTime() - birthDate.getTime());
+  // 未来の場合は0歳とする
+  if (isFuture) age = 0;
+
+  // 生存日数（未来の場合は0）
+  const diffTime = isFuture ? 0 : Math.abs(today.getTime() - birthDate.getTime());
   const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  
+
   // 次の誕生日
   let nextBirthday = new Date(today.getFullYear(), birthMonth - 1, birthDay);
   if (nextBirthday < today) {
     nextBirthday = new Date(today.getFullYear() + 1, birthMonth - 1, birthDay);
   }
-  
+
   // 次の誕生日まで
   const diffUntil = nextBirthday.getTime() - today.getTime();
   const daysUntilBirthday = Math.ceil(diffUntil / (1000 * 60 * 60 * 24));
-  
+
   // 誕生日の曜日
   const dayOfWeekEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const dayOfWeekJa = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
   const dayOfWeek = dayOfWeekEn[birthDate.getDay()];
   const dayOfWeekJp = dayOfWeekJa[birthDate.getDay()];
-  
-  return { age, days, nextBirthday, daysUntilBirthday, dayOfWeek, dayOfWeekJa: dayOfWeekJp };
+
+  return { age, days, nextBirthday, daysUntilBirthday, dayOfWeek, dayOfWeekJa: dayOfWeekJp, isFuture, daysUntilBirth };
 }
 
 // 学歴年表計算（日本の学制）
@@ -419,7 +431,7 @@ export default function HomePage() {
   // 各元号の最大年数を取得
   const getMaxEraYear = (era: string): number => {
     const eraRanges: { [key: string]: { start: number; end: number } } = {
-      '令和': { start: 2019, end: currentYear }, // 2019年〜現在
+      '令和': { start: 2019, end: currentYear + 1 }, // 2019年〜来年（未来の出産予定日にも対応）
       '平成': { start: 1989, end: 2019 }, // 1989年〜2019年（31年間）
       '昭和': { start: 1926, end: 1989 }, // 1926年〜1989年（64年間）
       '大正': { start: 1912, end: 1926 }, // 1912年〜1926年（15年間）
@@ -538,7 +550,7 @@ export default function HomePage() {
                     onChange={(e) => handleYearChange(Number(e.target.value))}
                     className="flex-1 px-4 py-3 bg-transparent border-0 text-stone-900 focus:outline-none focus:ring-0 text-sm font-medium"
                   >
-                    {Array.from({ length: 100 }, (_, i) => currentYear - i).map((y) => (
+                    {Array.from({ length: 101 }, (_, i) => currentYear + 1 - i).map((y) => (
                       <option key={y} value={y}>{y}</option>
                     ))}
                   </select>
@@ -574,37 +586,49 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-12 gap-4">
             
-            {/* Age Card */}
+            {/* Age Card / Birth Countdown Card */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
-                Age · 年齢
+                {ageData.isFuture
+                  ? (isJa ? '誕生まで' : 'Until Birth')
+                  : 'Age · 年齢'}
               </p>
               <div className="flex items-baseline gap-2 mb-2">
                 <h3 className="text-5xl font-bold text-stone-900">
-                  {ageData.age}
+                  {ageData.isFuture ? ageData.daysUntilBirth : ageData.age}
                 </h3>
-                <span className="text-xl text-stone-400">{isJa ? '歳' : 'years'}</span>
+                <span className="text-xl text-stone-400">
+                  {ageData.isFuture
+                    ? (isJa ? '日後' : ' days')
+                    : (isJa ? '歳' : 'years')}
+                </span>
               </div>
               <p className="text-sm text-stone-500">
-                {ageData.days.toLocaleString()}{isJa ? '日目' : ' days lived'}
+                {ageData.isFuture
+                  ? (isJa ? '出産予定日' : 'Expected due date')
+                  : `${ageData.days.toLocaleString()}${isJa ? '日目' : ' days lived'}`}
               </p>
             </div>
 
-            {/* Next Birthday Card */}
+            {/* Next Birthday Card / Due Date Card */}
             <div className="col-span-6 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
               <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-4">
-                Next Birthday
+                {ageData.isFuture
+                  ? (isJa ? '予定日' : 'Due Date')
+                  : 'Next Birthday'}
               </p>
               <div className="flex items-baseline gap-2 mb-2">
                 <h3 className="text-5xl font-bold text-stone-900">
-                  {ageData.daysUntilBirthday}
+                  {ageData.isFuture ? `${month}/${day}` : ageData.daysUntilBirthday}
                 </h3>
-                <span className="text-xl text-stone-400">{isJa ? '日後' : ' days'}</span>
+                <span className="text-xl text-stone-400">
+                  {ageData.isFuture ? '' : (isJa ? '日後' : ' days')}
+                </span>
               </div>
               <p className="text-sm text-stone-500">
-                {ageData.nextBirthday.getFullYear()}.
-                {(ageData.nextBirthday.getMonth() + 1).toString().padStart(2, '0')}.
-                {ageData.nextBirthday.getDate().toString().padStart(2, '0')}
+                {ageData.isFuture
+                  ? `${year}.${month.toString().padStart(2, '0')}.${day.toString().padStart(2, '0')}`
+                  : `${ageData.nextBirthday.getFullYear()}.${(ageData.nextBirthday.getMonth() + 1).toString().padStart(2, '0')}.${ageData.nextBirthday.getDate().toString().padStart(2, '0')}`}
               </p>
             </div>
 
