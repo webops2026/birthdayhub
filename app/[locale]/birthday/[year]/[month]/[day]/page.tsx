@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { getAge, getZodiacSign, getChineseZodiac, getWareki, getYakudoshi } from '@/lib/birthday-utils';
 import { getFamousBirthdays } from '@/lib/famous-birthdays';
@@ -41,7 +41,7 @@ export default async function BirthdayPage({ params }: Props) {
   const yakudoshi = getYakudoshi(yearNum, birthdate);
   const famousPeople = getFamousBirthdays(monthNum, dayNum);
 
-  const t = useTranslations('birthday');
+  const t = await getTranslations('birthday');
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

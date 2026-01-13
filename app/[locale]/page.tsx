@@ -951,126 +951,118 @@ export default function HomePage() {
 
             {/* Life Milestones Card - Wide */}
             {!ageData.isFuture && lifeMilestones.nextMilestone && (
-              <div className="col-span-12 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-white relative overflow-hidden">
-                {/* 背景装飾 */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
-                  <div className="absolute bottom-0 left-0 w-48 h-48 bg-pink-300 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
-                </div>
+              <div className="col-span-12 bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+                <p className="text-xs font-medium text-stone-400 tracking-widest uppercase mb-6">
+                  {isJa ? '人生の記念日' : 'Life Milestones'}
+                </p>
 
-                <div className="relative z-10">
-                  <p className="text-xs font-medium text-white/60 tracking-widest uppercase mb-6">
-                    {isJa ? '人生の記念日' : 'Life Milestones'}
-                  </p>
-
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* 次のマイルストーン */}
-                    <div>
-                      <p className="text-sm text-white/70 mb-2">
-                        {isJa ? '次の記念日まで' : 'Next Milestone'}
-                      </p>
-                      <div className="flex items-baseline gap-3 mb-2">
-                        <span className="text-5xl font-bold">
-                          {lifeMilestones.nextMilestone.daysFromNow.toLocaleString()}
-                        </span>
-                        <span className="text-xl text-white/70">
-                          {isJa ? '日' : 'days'}
-                        </span>
-                      </div>
-                      <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-                        <p className="text-2xl font-bold mb-1">
-                          {isJa ? lifeMilestones.nextMilestone.label_ja : lifeMilestones.nextMilestone.label_en}
-                        </p>
-                        <p className="text-sm text-white/70">
-                          {lifeMilestones.nextMilestone.date.getFullYear()}.
-                          {(lifeMilestones.nextMilestone.date.getMonth() + 1).toString().padStart(2, '0')}.
-                          {lifeMilestones.nextMilestone.date.getDate().toString().padStart(2, '0')}
-                        </p>
-                        {lifeMilestones.nextMilestone.type === 'seconds' && (
-                          <p className="text-xs text-white/50 mt-1">
-                            {isJa ? '※約31.7年で達成' : '※Achieved in ~31.7 years'}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* 最近達成したマイルストーン */}
-                    {lifeMilestones.recentPastMilestone && (
-                      <div>
-                        <p className="text-sm text-white/70 mb-2">
-                          {isJa ? '直近で達成した記念日' : 'Recently Achieved'}
-                        </p>
-                        <div className="flex items-baseline gap-3 mb-2">
-                          <span className="text-5xl font-bold text-green-300">
-                            {Math.abs(lifeMilestones.recentPastMilestone.daysFromNow).toLocaleString()}
-                          </span>
-                          <span className="text-xl text-white/70">
-                            {isJa ? '日前' : 'days ago'}
-                          </span>
-                        </div>
-                        <div className="bg-green-500/20 rounded-xl p-4 backdrop-blur-sm border border-green-400/30">
-                          <p className="text-2xl font-bold mb-1 text-green-300">
-                            {isJa ? lifeMilestones.recentPastMilestone.label_ja : lifeMilestones.recentPastMilestone.label_en}
-                          </p>
-                          <p className="text-sm text-white/70">
-                            {lifeMilestones.recentPastMilestone.date.getFullYear()}.
-                            {(lifeMilestones.recentPastMilestone.date.getMonth() + 1).toString().padStart(2, '0')}.
-                            {lifeMilestones.recentPastMilestone.date.getDate().toString().padStart(2, '0')}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 今後のマイルストーン一覧 */}
-                  <div className="mt-8">
-                    <p className="text-sm text-white/70 mb-3">
-                      {isJa ? '今後の記念日' : 'Upcoming Milestones'}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* 次のマイルストーン */}
+                  <div className="bg-gradient-to-br from-stone-50 to-stone-100 rounded-xl p-6">
+                    <p className="text-sm text-stone-500 mb-2">
+                      {isJa ? '次の記念日まで' : 'Next Milestone'}
                     </p>
-                    <div className="flex flex-wrap gap-2">
-                      {lifeMilestones.milestones
-                        .filter(m => !m.isPast)
-                        .slice(0, 6)
-                        .map((m, index) => (
-                          <div
-                            key={index}
-                            className={`px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm ${
-                              index === 0
-                                ? 'bg-white/20 text-white border border-white/30'
-                                : 'bg-white/10 text-white/80'
-                            }`}
-                          >
-                            {isJa ? m.label_ja : m.label_en}
-                            <span className="text-white/50 ml-2 text-xs">
-                              {m.date.getFullYear()}
-                            </span>
-                          </div>
-                        ))}
+                    <div className="flex items-baseline gap-3 mb-3">
+                      <span className="text-5xl font-bold text-stone-900">
+                        {lifeMilestones.nextMilestone.daysFromNow.toLocaleString()}
+                      </span>
+                      <span className="text-xl text-stone-400">
+                        {isJa ? '日' : 'days'}
+                      </span>
+                    </div>
+                    <div className="bg-white rounded-lg p-4 border border-stone-200">
+                      <p className="text-2xl font-bold text-stone-800 mb-1">
+                        {isJa ? lifeMilestones.nextMilestone.label_ja : lifeMilestones.nextMilestone.label_en}
+                      </p>
+                      <p className="text-sm text-stone-500">
+                        {lifeMilestones.nextMilestone.date.getFullYear()}.
+                        {(lifeMilestones.nextMilestone.date.getMonth() + 1).toString().padStart(2, '0')}.
+                        {lifeMilestones.nextMilestone.date.getDate().toString().padStart(2, '0')}
+                      </p>
+                      {lifeMilestones.nextMilestone.type === 'seconds' && (
+                        <p className="text-xs text-stone-400 mt-1">
+                          {isJa ? '※約31.7年で達成' : '※Achieved in ~31.7 years'}
+                        </p>
+                      )}
                     </div>
                   </div>
 
-                  {/* 達成済みマイルストーン */}
-                  {lifeMilestones.milestones.filter(m => m.isPast).length > 0 && (
-                    <div className="mt-6 pt-6 border-t border-white/10">
-                      <p className="text-sm text-white/50 mb-3">
-                        {isJa ? '達成済み' : 'Achieved'}
+                  {/* 最近達成したマイルストーン */}
+                  {lifeMilestones.recentPastMilestone && (
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6">
+                      <p className="text-sm text-stone-500 mb-2">
+                        {isJa ? '直近で達成した記念日' : 'Recently Achieved'}
                       </p>
-                      <div className="flex flex-wrap gap-2">
-                        {lifeMilestones.milestones
-                          .filter(m => m.isPast)
-                          .slice(-5)
-                          .map((m, index) => (
-                            <div
-                              key={index}
-                              className="px-3 py-1.5 rounded-full text-xs bg-white/5 text-white/50"
-                            >
-                              {isJa ? m.label_ja : m.label_en} ✓
-                            </div>
-                          ))}
+                      <div className="flex items-baseline gap-3 mb-3">
+                        <span className="text-5xl font-bold text-emerald-600">
+                          {Math.abs(lifeMilestones.recentPastMilestone.daysFromNow).toLocaleString()}
+                        </span>
+                        <span className="text-xl text-stone-400">
+                          {isJa ? '日前' : 'days ago'}
+                        </span>
+                      </div>
+                      <div className="bg-white rounded-lg p-4 border border-emerald-200">
+                        <p className="text-2xl font-bold text-emerald-700 mb-1">
+                          {isJa ? lifeMilestones.recentPastMilestone.label_ja : lifeMilestones.recentPastMilestone.label_en}
+                        </p>
+                        <p className="text-sm text-stone-500">
+                          {lifeMilestones.recentPastMilestone.date.getFullYear()}.
+                          {(lifeMilestones.recentPastMilestone.date.getMonth() + 1).toString().padStart(2, '0')}.
+                          {lifeMilestones.recentPastMilestone.date.getDate().toString().padStart(2, '0')}
+                        </p>
                       </div>
                     </div>
                   )}
                 </div>
+
+                {/* 今後のマイルストーン一覧 */}
+                <div className="mt-8">
+                  <p className="text-sm text-stone-500 mb-3">
+                    {isJa ? '今後の記念日' : 'Upcoming Milestones'}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {lifeMilestones.milestones
+                      .filter(m => !m.isPast)
+                      .slice(0, 6)
+                      .map((m, index) => (
+                        <div
+                          key={index}
+                          className={`px-4 py-2 rounded-full text-sm font-medium ${
+                            index === 0
+                              ? 'bg-stone-900 text-white'
+                              : 'bg-stone-100 text-stone-600'
+                          }`}
+                        >
+                          {isJa ? m.label_ja : m.label_en}
+                          <span className={`ml-2 text-xs ${index === 0 ? 'text-stone-400' : 'text-stone-400'}`}>
+                            {m.date.getFullYear()}
+                          </span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
+                {/* 達成済みマイルストーン */}
+                {lifeMilestones.milestones.filter(m => m.isPast).length > 0 && (
+                  <div className="mt-6 pt-6 border-t border-stone-100">
+                    <p className="text-sm text-stone-400 mb-3">
+                      {isJa ? '達成済み' : 'Achieved'}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {lifeMilestones.milestones
+                        .filter(m => m.isPast)
+                        .slice(-5)
+                        .map((m, index) => (
+                          <div
+                            key={index}
+                            className="px-3 py-1.5 rounded-full text-xs bg-stone-50 text-stone-500 border border-stone-200"
+                          >
+                            {isJa ? m.label_ja : m.label_en} ✓
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
